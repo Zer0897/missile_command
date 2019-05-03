@@ -1,8 +1,14 @@
 #ifndef MAINLOOP_H
 #define MAINLOOP_H
 
-void mainloop();
-void draw();
+typedef struct {
+	int x;
+	int y;
+} Coord;
 
+void setup();
+void mainloop();
+void draw(char*);
+int handle_input(Coord*);
 
 #endif
