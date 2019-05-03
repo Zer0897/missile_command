@@ -9,10 +9,10 @@ TARGET=target
 
 LIBS=-lncurses
 
-_DEPS = mainloop.h
+_DEPS = mainloop.h input.h vector.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ = main.o mainloop.o
+_OBJ = main.o mainloop.o input.o vector.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 $(ODIR)/%.o: $(SDIR)/%.c $(DEPS)

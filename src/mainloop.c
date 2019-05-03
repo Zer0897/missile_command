@@ -1,8 +1,9 @@
 #include <stdlib.h>
 #include <time.h>
 #include <ncurses.h>
-#include <mainloop.h>
 
+#include "mainloop.h"
+#include "input.h"
 
 
 void setup() {
@@ -13,7 +14,7 @@ void setup() {
 	mousemask(BUTTON1_RELEASED, NULL); // Listen for mouse click.
 	start_color(); // Enable colored formatting.
 	curs_set(2); // Invisible cursor
-}
+ }
 
 
 void mainloop() {
@@ -30,28 +31,3 @@ void mainloop() {
 	printf("Clicked y: %d, x: %d\n", click.y, click.x);
 }
 
-
-void draw(char *msg) {
-	int row = getmaxy(stdscr) / 2;
-	int col = getmaxx(stdscr) / 2;
-
-	// init_pair(1, COLOR_CYAN, COLOR_BLACK);
-	// attron(A_REVERSE);
-	mvprintw(row, col, msg);
-	// attroff(A_REVERSE);
-	refresh();
-}
-
-
-int handle_input(Coord *coord) {
-	MEVENT mouse_event;
-	int status = ERR;
-
-	int c = getch();
-	if (c == KEY_MOUSE && getmouse(&mouse_event) == OK) {
-		coord->x = mouse_event.x;
-		coord->y = mouse_event.y;
-		status = OK;
-	}
-	return status;
-}
