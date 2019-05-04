@@ -1,5 +1,5 @@
-#ifndef INPUT_H
-#define INPUT_H
+#ifndef DRAW_H
+#define DRAW_H
 
 #include <ncurses.h>
 #include "coord.h"
@@ -8,7 +8,7 @@
 typedef struct {
     WINDOW *window;
     Coord coord;
-    char* view;
+    int acs_flag;
 } Sprite;
 
 Sprite SPRITES[1];
