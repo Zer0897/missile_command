@@ -53,8 +53,8 @@ static void collect_garbage(Canvas* canvas) {
         if (!sprite)
             continue;
 
-        if (cmp_eq(sprite->current, sprite->end)) {
-            *sprite = NULL;
+        if (cmp_eq(&sprite->path.current, &sprite->path.end)) {
+            canvas->sprites[i] = NULL;
             --canvas->sprite_count;
         }
     }

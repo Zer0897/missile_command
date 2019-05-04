@@ -2,7 +2,7 @@
 #define DRAW_H
 
 #include <ncurses.h>
-#include "coord.h"
+#include "animate.h"
 
 typedef struct {
     WINDOW* window;
