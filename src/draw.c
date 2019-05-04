@@ -26,36 +26,38 @@ Canvas* get_canvas(enum CanvasFlag flag) {
 
 static void add_sprite(Canvas* canvas, Sprite* sprite) {
     const static sprite_size = sizeof(Sprite);
-    size_t current_size = sprite_size * canvas->sprites_max;
-    size_t len = current_size / sprite_size;
 
-    // First time adding sprite, need to allocate memory.
-    if (current_size == sprite_size) {
-        current_size = sprite_size * 25;
-        canvas->sprites = (Sprite*) malloc(current_size);
+    // First time, need to allocate memory.
+    if (!canvas->sprites) {
+        canvas->sprite_max = 25;
+        canvas->sprites = (Sprite*) malloc(sprite_size * canvas->sprite_max);
     // Not enough space, allocate twice as much as before.
-    } else if (len == canvas->sprite_count + 1) {
-        current_size *= 2;
-        canvas->sprites = (Sprite*) realloc(canvas->sprites, current_size);
-        len = current_size / sprite_size;
+    } else if (canvas->sprite_max == canvas->sprite_count + 1) {
+        canvas->sprite_max *= 2;
+        canvas->sprites = (Sprite*) realloc(canvas->sprites, sprite_size * canvas->sprite_max);
     }
     // Look for usable memory.
-    size_t i = 0;
-    Sprite* sprite = canvas->sprites[i];
-    for (; !sprite && i < len; i++) {
-        sprite = canvas->sprites[i];
+    for (size_t i = 0; i < canvas->sprite_max; i++) {
+        if (!canvas->sprites[i]) {
+            canvas->sprites[i] = *sprite;
+            ++canvas->sprite_count;
+            return;
+        }
     }
-    if (sprite) {
-        canvas->sprite_count += 1;
-    } else {
-        panic("Could not allocate memory for sprite.");
-    }
+    panic("Could not allocate memory for sprite.");
 }
 
-static void remove_sprite(Canvas* canvas, Sprite* sprite) {
-    const static sprite_size = sizeof(Sprite);
-    size_t current_size = sizeof(canvas->sprites);
-    size_t len = current_size / sprite_size;
+static void collect_garbage(Canvas* canvas) {
+    for (size_t i = 0; i < canvas->sprite_max; i++) {
+        Sprite* sprite = canvas->sprites[i];
+        if (!sprite)
+            continue;
+
+        if (cmp_eq(sprite->current, sprite->end)) {
+            *sprite = NULL;
+            --canvas->sprite_count;
+        }
+    }
 }
 
 static void init_commander() {

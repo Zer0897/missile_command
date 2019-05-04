@@ -8,7 +8,7 @@ typedef struct {
     WINDOW* window;
     Sprite* sprites;
     size_t sprite_count;
-    size_t sprites_max;
+    size_t sprite_max;
 } Canvas;
 
 

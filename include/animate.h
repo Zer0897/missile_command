@@ -20,6 +20,7 @@ typedef struct {
 
 
 void lerp(Vector*);
-
+double distance(Coord*, Coord*);
+bool cmp_eq(Coord*, Coord*);
 
 #endif
