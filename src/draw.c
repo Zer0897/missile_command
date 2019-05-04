@@ -21,7 +21,7 @@ void __init_crosshair() {
     int width = COLS * ratio;
     Sprite* crosshair = get_sprite(CROSSHAIR);
 
-    crosshair->window = newwin(0, 0, 0, 0); // Default.
+    crosshair->window = dupwin(stdscr); // Default.
     nodelay(crosshair->window, true);
     crosshair->acs_flag = ACS_PLUS;
 }
@@ -30,8 +30,11 @@ void __update_crosshair() {
     Coord pos;
     Sprite* crosshair = get_sprite(CROSSHAIR);
     if (get_clickpos(crosshair->window, &pos) == OK) {
-        wdelch(crosshair->window);
+        mvwdelch(crosshair->window, crosshair->coord.y, crosshair->coord.x);
         mvwaddch(crosshair->window, pos.y, pos.x, crosshair->acs_flag);
+        crosshair->coord.y = pos.y;
+        crosshair->coord.x = pos.x;
+
         wrefresh(crosshair->window);
     }
 }
