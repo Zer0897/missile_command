@@ -18,7 +18,7 @@ void setup() {
     start_color(); // Enable colored formatting.
 	curs_set(2); // Invisible cursor
 
-    init_screens();
+    init_sprites();
 }
 
 
@@ -28,7 +28,7 @@ void mainloop() {
 	Coord click;
     bool running = true;
     while (running) {
-        update_screens();
+        update_sprites();
 	}
 	endwin();
 	printf("Clicked y: %d, x: %d\n", click.y, click.x);

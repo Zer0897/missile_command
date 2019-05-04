@@ -16,8 +16,8 @@ Sprite SPRITES[1];
 enum SpriteFlag { CROSSHAIR, MAX_SPRITES };
 
 Sprite* get_sprite(enum SpriteFlag);
-void init_screens();
-void update_screens();
+void init_sprites();
+void update_sprites();
 void __update_crosshair();
 void __init_crosshair();
 

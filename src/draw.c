@@ -1,11 +1,11 @@
 #include "draw.h"
 #include "input.h"
 
-void init_screens() {
+void init_sprites() {
     __init_crosshair();
 }
 
-void update_screens() {
+void update_sprites() {
     __update_crosshair();
     refresh();
 }
