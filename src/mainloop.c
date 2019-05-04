@@ -16,7 +16,7 @@ void setup() {
 	mousemask(BUTTON1_RELEASED | REPORT_MOUSE_POSITION, NULL); // Listen for mouse events
     // Display config
     start_color(); // Enable colored formatting.
-	curs_set(2); // Invisible cursor
+	curs_set(0); // Invisible cursor
 
     init_sprites();
 }

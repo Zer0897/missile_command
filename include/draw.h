@@ -4,20 +4,24 @@
 #include <ncurses.h>
 #include "coord.h"
 
+typedef struct {
+    WINDOW* window;
+    Sprite* sprites;
+    size_t sprite_count;
+} Canvas;
 
 typedef struct {
-    WINDOW *window;
     Coord coord;
     int acs_flag;
+    Vector path;
 } Sprite;
 
-Sprite SPRITES[1];
 
-enum SpriteFlag { CROSSHAIR, MAX_SPRITES };
+enum CanvasFlag { CROSSHAIR, MAX_SPRITES };
 
-Sprite* get_sprite(enum SpriteFlag);
-void init_sprites();
-void update_sprites();
+Canvas* get_canvas(enum CanvasFlag);
+void init_canvas();
+void update_canvas();
 void __update_crosshair();
 void __init_crosshair();
 
