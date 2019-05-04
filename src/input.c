@@ -2,7 +2,7 @@
 #include "input.h"
 
 
-int __get_event(WINDOW* win, MEVENT* event, int event_type) {
+static int get_event(WINDOW* win, MEVENT* event, int event_type) {
 	int status = ERR;
 	int c = wgetch(win);
 	if (c == KEY_MOUSE && getmouse(event) == OK) {
@@ -12,7 +12,7 @@ int __get_event(WINDOW* win, MEVENT* event, int event_type) {
 }
 
 
-int __get_eventpos(WINDOW* win, Coord* coord, int event_type) {
+static int get_eventpos(WINDOW* win, Coord* coord, int event_type) {
 	MEVENT event;
 
 	int status = __get_event(win, &event, event_type);
