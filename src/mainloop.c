@@ -21,6 +21,15 @@ void setup() {
     init_sprites();
 }
 
+void teardown() {
+	endwin();
+	exit(0);
+}
+
+void panic(char* str) {
+	printf("Error: %s", str);
+	teardown();
+}
 
 void mainloop() {
 	setup();
@@ -30,7 +39,6 @@ void mainloop() {
     while (running) {
         update_sprites();
 	}
-	endwin();
-	printf("Clicked y: %d, x: %d\n", click.y, click.x);
+	teardown();
 }
 

@@ -1,40 +1,79 @@
 #include "draw.h"
 #include "input.h"
+#include "mainloop.h"
 
-void init_sprites() {
-    __init_crosshair();
+extern Canvas;
+extern Sprite;
+
+static void add_sprite(Canvas*, Sprite*);
+static void remove_sprite(Canvas*, Sprite*);
+static void update_commander();
+static void init_commander();
+
+void init_canvases() {
+    init_commander();
 }
 
-void update_sprites() {
-    __update_crosshair();
+void update_canvases() {
+    update_commander();
     refresh();
 }
 
-Sprite* get_sprite(enum SpriteFlag flag) {
-    static Sprite _sprites[MAX_SPRITES];
-    return &_sprites[flag];
+Canvas* get_canvas(enum CanvasFlag flag) {
+    static Canvas _canvases[CANVAS_COUNT];
+    return &_canvases[flag];
 }
 
-void __init_crosshair() {
-    float ratio = 0.05f;
-    int height = LINES * ratio;
-    int width = COLS * ratio;
-    Sprite* crosshair = get_sprite(CROSSHAIR);
+static void add_sprite(Canvas* canvas, Sprite* sprite) {
+    const static sprite_size = sizeof(Sprite);
+    size_t current_size = sprite_size * canvas->sprites_max;
+    size_t len = current_size / sprite_size;
 
-    crosshair->window = dupwin(stdscr); // Default.
-    nodelay(crosshair->window, true);
-    crosshair->acs_flag = ACS_PLUS;
+    // First time adding sprite, need to allocate memory.
+    if (current_size == sprite_size) {
+        current_size = sprite_size * 25;
+        canvas->sprites = (Sprite*) malloc(current_size);
+    // Not enough space, allocate twice as much as before.
+    } else if (len == canvas->sprite_count + 1) {
+        current_size *= 2;
+        canvas->sprites = (Sprite*) realloc(canvas->sprites, current_size);
+        len = current_size / sprite_size;
+    }
+    // Look for usable memory.
+    size_t i = 0;
+    Sprite* sprite = canvas->sprites[i];
+    for (; !sprite && i < len; i++) {
+        sprite = canvas->sprites[i];
+    }
+    if (sprite) {
+        canvas->sprite_count += 1;
+    } else {
+        panic("Could not allocate memory for sprite.");
+    }
 }
 
-void __update_crosshair() {
-    Coord pos;
-    Sprite* crosshair = get_sprite(CROSSHAIR);
-    if (get_clickpos(crosshair->window, &pos) == OK) {
-        mvwdelch(crosshair->window, crosshair->coord.y, crosshair->coord.x);
-        mvwaddch(crosshair->window, pos.y, pos.x, crosshair->acs_flag);
-        crosshair->coord.y = pos.y;
-        crosshair->coord.x = pos.x;
+static void remove_sprite(Canvas* canvas, Sprite* sprite) {
+    const static sprite_size = sizeof(Sprite);
+    size_t current_size = sizeof(canvas->sprites);
+    size_t len = current_size / sprite_size;
+}
 
-        wrefresh(crosshair->window);
+static void init_commander() {
+    Canvas* canvas = get_canvas(COMMANDER);
+    canvas->window = dupwin(stdscr); // Default.
+    nodelay(canvas->window, true);
+
+}
+
+static void update_commander() {
+    Coord click_pos;
+    Canvas* canvas = get_canvas(COMMANDER);
+    if (get_clickpos(canvas->window, &click_pos) == OK) {
+        Sprite crosshair = {};
+        // mvwaddch(crosshair->window, pos.y, pos.x, crosshair->acs_flag);
+        // crosshair->coord.y = pos.y;
+        // crosshair->coord.x = pos.x;
+
+        // wrefresh(crosshair->window);
     }
 }

@@ -8,7 +8,9 @@ typedef struct {
     WINDOW* window;
     Sprite* sprites;
     size_t sprite_count;
+    size_t sprites_max;
 } Canvas;
+
 
 typedef struct {
     Coord coord;
@@ -17,12 +19,11 @@ typedef struct {
 } Sprite;
 
 
-enum CanvasFlag { CROSSHAIR, MAX_SPRITES };
+enum CanvasFlag { COMMANDER, CANVAS_COUNT };
 
 Canvas* get_canvas(enum CanvasFlag);
-void init_canvas();
-void update_canvas();
-void __update_crosshair();
-void __init_crosshair();
+void init_canvases();
+void update_canvases();
+
 
 #endif

@@ -2,7 +2,7 @@
 #define INPUT_H
 
 #include <ncurses.h>
-#include "coord.h"
+#include "animate.h"
 
 int __get_event(WINDOW*, MEVENT*, int);
 int __get_eventpos(WINDOW*, Coord*, int);

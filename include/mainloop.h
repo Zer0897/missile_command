@@ -2,6 +2,8 @@
 #define MAINLOOP_H
 
 void setup();
+void panic();
+void teardown();
 void mainloop();
 
 #endif
