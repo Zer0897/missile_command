@@ -13,13 +13,13 @@ void setup() {
     noecho(); // Don't echo input.
 	keypad(stdscr, true); // Accept all keys. Needed for mouse.
 	halfdelay(1); // Wait 1/10 of a second on input.
-	mousemask(BUTTON1_CLICKED | REPORT_MOUSE_POSITION, NULL); // Listen for mouse events
+	mousemask(BUTTON1_RELEASED | REPORT_MOUSE_POSITION, NULL); // Listen for mouse events
     // Display config
     start_color(); // Enable colored formatting.
 	curs_set(2); // Invisible cursor
 
     init_screens();
- }
+}
 
 
 void mainloop() {

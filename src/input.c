@@ -24,7 +24,7 @@ int __get_eventpos(WINDOW* win, Coord* coord, int event_type) {
 }
 
 int get_clickpos(WINDOW* win, Coord *coord) {
-	return __get_eventpos(win, coord, BUTTON1_CLICKED);
+	return __get_eventpos(win, coord, BUTTON1_RELEASED);
 }
 
 int get_mousepos(WINDOW* win, Coord* coord) {
