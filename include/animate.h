@@ -2,6 +2,7 @@
 #define ANIMATE_H
 
 #include <time.h>
+#include <ncurses.h>
 
 
 typedef struct {

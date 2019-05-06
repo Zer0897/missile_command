@@ -3,22 +3,15 @@
 #include <ncurses.h>
 
 #include "mainloop.h"
-#include "input.h"
-#include "draw.h"
+#include "input_layer.h"
+#include "canvas.h"
 
 
-void setup() {
+void init() {
 	initscr();
-    // Key configs
     noecho(); // Don't echo input.
-	keypad(stdscr, true); // Accept all keys. Needed for mouse.
-	halfdelay(1); // Wait 1/10 of a second on input.
-	mousemask(BUTTON1_RELEASED | REPORT_MOUSE_POSITION, NULL); // Listen for mouse events
-    // Display config
     start_color(); // Enable colored formatting.
 	curs_set(0); // Invisible cursor
-
-    init_sprites();
 }
 
 void teardown() {
@@ -32,13 +25,14 @@ void panic(char* str) {
 }
 
 void mainloop() {
-	setup();
 
-	Coord click;
+
+	init();
+	init_input();
+
     bool running = true;
     while (running) {
-        update_sprites();
+		update_input();
 	}
 	teardown();
 }
-

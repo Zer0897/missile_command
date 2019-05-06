@@ -7,12 +7,12 @@ SDIR=src
 ODIR=obj
 TARGET=target
 
-LIBS=-lncurses
+LIBS=-lncurses -lm
 
-_DEPS = mainloop.h input.h animate.h draw.h
+_DEPS = mainloop.h input_layer.h animate.h canvas.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ = main.o mainloop.o input.o animate.o draw.o
+_OBJ = main.o mainloop.o input_layer.o animate.o canvas.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 $(ODIR)/%.o: $(SDIR)/%.c $(DEPS)

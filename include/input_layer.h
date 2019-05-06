@@ -3,8 +3,10 @@
 
 #include <ncurses.h>
 #include "animate.h"
+#include "canvas.h"
 
-int get_clickpos(WINDOW*, Coord*);
-int get_mousepos(WINDOW*, Coord*);
+
+void update_input();
+void init_input();
 
 #endif
