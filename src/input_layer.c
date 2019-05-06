@@ -1,5 +1,6 @@
 #include <ncurses.h>
 #include "input_layer.h"
+#include "canvas.h"
 
 
 static int get_event(MEVENT*, int);
@@ -7,6 +8,12 @@ static int get_clickpos(Coord*);
 
 
 void update_input() {
+    Coord click_pos;
+    if (get_clickpos(&click_pos) == OK) {
+        Sprite crosshair = {.path.current = click_pos, .view = '+'};
+		add_sprite(&INPUT_CANVAS, crosshair);
+		wrefresh(INPUT_CANVAS.window);
+	}
 
 }
 
@@ -15,6 +22,9 @@ void init_input() {
 	INPUT_CANVAS.window = newwin(0, 0, 0, 0);
 	keypad(INPUT_CANVAS.window, true); // Allows input from all keys. Includes mouse.
 	mousemask(BUTTON1_RELEASED | REPORT_MOUSE_POSITION, NULL); // Listen for mouse events
+
+	init_pair(1, COLOR_GREEN, COLOR_BLACK);
+	wattron(INPUT_CANVAS.window, COLOR_PAIR(1));
 }
 
 

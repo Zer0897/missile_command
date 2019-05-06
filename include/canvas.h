@@ -5,13 +5,11 @@
 #include "animate.h"
 
 
-enum SpriteState { ACTIVE, GARBAGE, DESTROYED };
-
 
 typedef struct {
-    int acs_flag;
+    char view;
     Vector path;
-    enum SpriteState state;
+    bool active;
 } Sprite;
 
 
@@ -24,8 +22,6 @@ typedef struct {
 Canvas INPUT_CANVAS;
 
 
-void init_canvases();
-void update_canvases();
-
+void add_sprite(Canvas*, Sprite);
 
 #endif

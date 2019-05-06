@@ -25,14 +25,14 @@ void panic(char* str) {
 }
 
 void mainloop() {
-
-
 	init();
 	init_input();
 
     bool running = true;
     while (running) {
 		update_input();
+
+		refresh();
 	}
 	teardown();
 }
