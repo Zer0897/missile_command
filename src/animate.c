@@ -26,12 +26,15 @@ void lerp(Vector* vec) {
 
     double mult = (elapsed / vec->speed);
 
-    Coord curr = {
-        .y = vec->beg.y + (vec->end.y - vec->beg.y) * mult,
-        .x = vec->beg.x + (vec->end.x - vec->beg.x) * mult
-    };
-
-    vec->current = (mult <= 1) ? curr : vec->end;
+    if (mult > 1) {
+        vec->current = vec->end;
+    } else {
+        Coord curr = {
+            .y = vec->beg.y + (vec->end.y - vec->beg.y) * mult,
+            .x = vec->beg.x + (vec->end.x - vec->beg.x) * mult
+        };
+        vec->current = curr;
+    }
 }
 
 

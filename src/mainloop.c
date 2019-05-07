@@ -37,8 +37,6 @@ void mainloop() {
 		update_alien();
 
 		refresh();
-		// getch();
-		// teardown();
 	}
 	teardown();
 }
