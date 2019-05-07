@@ -31,6 +31,9 @@ void mainloop() {
 	init_input();
 	init_alien();
 
+	// set_missile_count(5);
+	// set_rate_limit(1);
+
     bool running = true;
     while (running) {
 		update_input();

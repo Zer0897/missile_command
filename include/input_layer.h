@@ -1,5 +1,5 @@
-#ifndef INPUT_H
-#define INPUT_H
+#ifndef INPUT_LAYER_H
+#define INPUT_LAYER_H
 
 #include <ncurses.h>
 #include "animate.h"
