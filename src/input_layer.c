@@ -21,7 +21,8 @@ void update_input() {
 void init_input() {
 	INPUT_CANVAS.window = newwin(0, 0, 0, 0);
 	keypad(INPUT_CANVAS.window, true); // Allows input from all keys. Includes mouse.
-	mousemask(BUTTON1_RELEASED | REPORT_MOUSE_POSITION, NULL); // Listen for mouse events
+	mousemask(BUTTON1_RELEASED, NULL); // Listen for mouse events
+	nodelay(INPUT_CANVAS.window, true);
 
 	init_pair(1, COLOR_GREEN, COLOR_BLACK);
 	wattron(INPUT_CANVAS.window, COLOR_PAIR(1));

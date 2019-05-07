@@ -5,9 +5,11 @@
 #include "mainloop.h"
 #include "input_layer.h"
 #include "canvas.h"
+#include "alien_layer.h"
 
 
 void init() {
+	srand(time(NULL)); // seed for random events.
 	initscr();
     noecho(); // Don't echo input.
     start_color(); // Enable colored formatting.
@@ -27,12 +29,16 @@ void panic(char* str) {
 void mainloop() {
 	init();
 	init_input();
+	init_alien();
 
     bool running = true;
     while (running) {
 		update_input();
+		update_alien();
 
 		refresh();
+		// getch();
+		// teardown();
 	}
 	teardown();
 }

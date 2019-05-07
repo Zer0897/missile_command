@@ -6,6 +6,9 @@
 #include "canvas.h"
 
 
+Canvas INPUT_CANVAS;
+
+
 void update_input();
 void init_input();
 

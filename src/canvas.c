@@ -1,23 +1,28 @@
 #include "canvas.h"
 #include "mainloop.h"
 
-extern Canvas;
-extern Sprite;
 
-void add_sprite(Canvas*, Sprite);
-// static void update_commander();
-// static void init_commander();
+void update_sprite(Canvas* canvas, Sprite* sprite) {
+    mvwdelch(canvas->window, sprite->path.current.y, sprite->path.current.x);
+    lerp(&sprite->path);
+    draw_sprite(canvas, sprite);
+}
 
+
+void draw_sprite(Canvas* canvas, Sprite* sprite) {
+    mvwaddch(
+        canvas->window, sprite->path.current.y,
+        sprite->path.current.x, sprite->view
+    );
+}
 
 // Might add a sprite to the given canvas.
 // If there is no memory left, nothing will happen.
 void add_sprite(Canvas* canvas, Sprite sprite) {
     for (int i = 0; i < 120; i++) {
         if (canvas->sprites[i].active == false) {
-            mvwaddch(
-                canvas->window, sprite.path.current.y,
-                sprite.path.current.x, sprite.view
-            );
+            sprite.active = true;
+            draw_sprite(canvas, &sprite);
             canvas->sprites[i] = sprite;
             break;
         }
@@ -42,5 +47,17 @@ void add_sprite(Canvas* canvas, Sprite sprite) {
 //         // crosshair->coord.x = pos.x;
 
 //         // wrefresh(crosshair->window);
+//     }
+// }
+
+// static void draw(Canvas* canvas, Sprite* sprite) {
+//     // 4x4 grid, start in the left corner
+//     int starty = sprite->path.current.y - 2;
+//     int startx = sprite->path.current.x - 2;
+//     for (int i = 0; i < 16; i++) {
+//         int x = startx + i;
+//         int y = starty + i;
+
+
 //     }
 // }
