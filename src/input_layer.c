@@ -10,7 +10,7 @@ static int get_clickpos(Coord*);
 void update_input() {
     Coord click_pos;
     if (get_clickpos(&click_pos) == OK) {
-        Sprite crosshair = {.path.current = click_pos, .view = '+'};
+        Sprite crosshair = {.path.current = click_pos, .view = 'X'};
 		add_sprite(&INPUT_CANVAS, crosshair);
 		wrefresh(INPUT_CANVAS.window);
 	}

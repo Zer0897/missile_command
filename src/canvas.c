@@ -1,5 +1,6 @@
 #include "canvas.h"
 #include "mainloop.h"
+#include "animate.h"
 
 
 void update_sprite(Canvas* canvas, Sprite* sprite) {

@@ -43,7 +43,7 @@ static void add_missile(Coord target) {
         .path.current = start,
         .path.beg = start,
         .path.end = target,
-        .view = "\u2500",
+        .view = ACS_DIAMOND,
         .path.speed = 4,
         .path.start_time = clock(),
         .active = true,

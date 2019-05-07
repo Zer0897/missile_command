@@ -1,7 +1,9 @@
 #include <time.h>
 #include <stdlib.h>
+#include <math.h>
 #include "animate.h"
-#include "math.h"
+
+
 
 bool cmp_eq(Coord* c1, Coord* c2) {
     return (c1->y == c2->y && c1->x == c2->x);

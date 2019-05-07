@@ -19,7 +19,7 @@ typedef struct {
 } Vector;
 
 typedef struct {
-    char view;
+    int view;
     Vector path;
     bool active;
 } Sprite;
