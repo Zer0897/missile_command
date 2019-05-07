@@ -3,9 +3,10 @@
 #include <ncurses.h>
 
 #include "mainloop.h"
-#include "input_layer.h"
 #include "canvas.h"
+#include "input_layer.h"
 #include "alien_layer.h"
+#include "defense_layer.h"
 
 
 void init() {
@@ -14,7 +15,20 @@ void init() {
     noecho(); // Don't echo input.
     start_color(); // Enable colored formatting.
 	curs_set(0); // Invisible cursor
+
+	init_input();
+	init_alien();
+	init_defense();
 }
+
+void update() {
+	update_input();
+	update_alien();
+	update_defense();
+
+	refresh();
+}
+
 
 void teardown() {
 	endwin();
@@ -28,18 +42,10 @@ void panic(char* str) {
 
 void mainloop() {
 	init();
-	init_input();
-	init_alien();
-
-	// set_missile_count(5);
-	// set_rate_limit(1);
 
     bool running = true;
     while (running) {
-		update_input();
-		update_alien();
-
-		refresh();
+		update();
 	}
 	teardown();
 }

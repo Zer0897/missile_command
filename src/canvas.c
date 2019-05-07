@@ -10,7 +10,13 @@ void update_sprite(Canvas* canvas, Sprite* sprite) {
 }
 
 
+void clear_sprite(Canvas* canvas, Sprite* sprite) {
+    mvwdelch(canvas->window, sprite->path.current.y, sprite->path.current.x);
+}
+
+
 void draw_sprite(Canvas* canvas, Sprite* sprite) {
+    sprite->active = true;
     mvwaddch(
         canvas->window, sprite->path.current.y,
         sprite->path.current.x, sprite->view
@@ -22,7 +28,6 @@ void draw_sprite(Canvas* canvas, Sprite* sprite) {
 void add_sprite(Canvas* canvas, Sprite sprite) {
     for (int i = 0; i < 120; i++) {
         if (canvas->sprites[i].active == false) {
-            sprite.active = true;
             draw_sprite(canvas, &sprite);
             canvas->sprites[i] = sprite;
             break;

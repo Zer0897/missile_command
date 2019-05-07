@@ -39,14 +39,8 @@ static void deploy_missiles() {
 
 static void add_missile(Coord target) {
     Coord start = { .x = rand() % COLS, .y = 0 };
-    Sprite missile = {
-        .path.current = start,
-        .path.beg = start,
-        .path.end = target,
-        .view = ACS_DIAMOND,
-        .path.speed = 4,
-        .path.start_time = clock(),
-        .active = true,
-    };
+    Sprite missile = { .view = ACS_DIAMOND };
+
+    set_animation(&missile, &start, &target);
     add_sprite(&ALIEN_CANVAS, missile);
 }

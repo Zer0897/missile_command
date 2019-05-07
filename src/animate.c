@@ -62,3 +62,12 @@ double slope(Coord* c1, Coord* c2) {
 
     return (sx && sy) ? sy / sx : 0;
 }
+
+
+void set_animation(Sprite* sprite, Coord* start, Coord* end) {
+    sprite->path.current = *start;
+    sprite->path.beg = *start;
+    sprite->path.end = *end;
+    sprite->path.speed = 5;
+    sprite->path.start_time = clock();
+}

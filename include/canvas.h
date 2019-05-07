@@ -31,6 +31,7 @@ typedef struct {
 } Canvas;
 
 
+void clear_sprite(Canvas*, Sprite*);
 void draw_sprite(Canvas*, Sprite*);
 void add_sprite(Canvas*, Sprite);
 void update_sprite(Canvas*, Sprite*);
