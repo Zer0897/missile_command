@@ -4,6 +4,12 @@
 #include "animate.h"
 
 
+static bool is_smooth(Coord* c1, Coord* c2, Coord* end) {
+    int s1 = (int) round(slope(c1, end));
+    int s2 = (int) round(slope(c2, end));
+
+    return (s1 == s2);
+}
 
 bool cmp_eq(Coord* c1, Coord* c2) {
     return (c1->y == c2->y && c1->x == c2->x);
@@ -21,21 +27,28 @@ double distance(Coord* c1, Coord* c2) {
     return sqrt(dy2 + dx2);
 }
 
+double slope(Coord* c1, Coord* c2) {
+    double sx = (double) c2->x - c1->x;
+    double sy = (double) c2->y - c1->y;
+
+    return (sx && sy) ? sy / sx : 0;
+}
+
 
 void lerp(Vector* vec) {
-    double total_dist = distance(&vec->beg, &vec->end);
     double elapsed = (double) (clock() - vec->start_time) / CLOCKS_PER_SEC;
-
     double mult = (elapsed / vec->speed);
 
     if (mult > 1) {
         vec->current = vec->end;
     } else {
-        Coord curr = {
+        Coord next = {
             .y = vec->beg.y + (vec->end.y - vec->beg.y) * mult,
             .x = vec->beg.x + (vec->end.x - vec->beg.x) * mult
         };
-        vec->current = curr;
+        if (is_smooth(&vec->current, &next, &vec->end)) {
+            vec->current = next;
+        }
     }
 }
 
