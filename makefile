@@ -30,6 +30,8 @@ _OBJ = \
 
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
+_setup := $(shell mkdir -p $(ODIR) $(TARGET))
+
 $(ODIR)/%.o: $(SDIR)/%.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
