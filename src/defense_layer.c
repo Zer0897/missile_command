@@ -23,7 +23,7 @@ void update_defense(int i) {
     if (!missile->active) {
         Coord start = { .x = COLS / 2, .y = LINES };
 
-        set_animation(missile, &start, target);
+        set_animation(missile, &start, &target->path.current);
         missile->view = ACS_DIAMOND;
         missile->path.speed = 15;
         missile->active = true;

@@ -17,15 +17,15 @@ void update_alien(int i) {
 
     static clock_t last_deploy;
     static int missile_count = 5;
-    static double rate_limit = CLOCKS_PER_SEC;
+    static double rate_limit = CLOCKS_PER_SEC / 2;
 
     bool ready = ((double) (clock() - last_deploy) >= rate_limit);
     if (sprite->active || !ready || !missile_count) {
         return;
     }
 
-    Coord target = {.x = COLS / 2, .y = LINES / 2};
     Coord start = { .x = rand() % COLS, .y = 0 };
+    Coord target = { .x = start.x, .y = LINES };
 
     set_animation(sprite, &start, &target);
     sprite->view = ACS_DIAMOND;

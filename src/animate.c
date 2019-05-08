@@ -8,6 +8,8 @@ static bool is_smooth(Coord*, Coord*, Coord*);
 
 
 void lerp(Vector* vec) {
+    if (!vec->start_time) return;
+
     double dist = distance(&vec->beg, &vec->end);
     double total_time = dist / vec->speed;
     double elapsed = (double) (clock() - vec->start_time) / CLOCKS_PER_SEC;
@@ -20,18 +22,10 @@ void lerp(Vector* vec) {
             .y = vec->beg.y + (vec->end.y - vec->beg.y) * mult,
             .x = vec->beg.x + (vec->end.x - vec->beg.x) * mult
         };
-        vec->current = next;
+        if (next.y != vec->current.y) vec->current = next;
     }
 }
 
-
-// void update_animation(Canvas* canvas, Sprite) {
-//     for (int i = 0; i < 120; i++) {
-//         if (canvas->sprites[i].active) {
-//             lerp(&canvas->sprites[i].path);
-//         }
-//     }
-// }
 
 static bool is_smooth(Coord* c1, Coord* c2, Coord* end) {
     int s1 = (int) slope(c1, end);

@@ -26,9 +26,10 @@ void update_input(int i) {
 void init_input() {
 	INPUT_CANVAS.window = newwin(0, 0, 0, 0);
 	keypad(INPUT_CANVAS.window, true); // Allows input from all keys. Includes mouse.
-	mousemask(BUTTON1_RELEASED, NULL); // Listen for mouse events
+	mousemask(BUTTON1_CLICKED, NULL); // Listen for mouse events
 	nodelay(INPUT_CANVAS.window, true);
 
+	mouseinterval(35);
 	init_pair(1, COLOR_GREEN, COLOR_BLACK);
 	wattron(INPUT_CANVAS.window, COLOR_PAIR(1));
 }
@@ -47,7 +48,7 @@ static int get_event(MEVENT* event, int event_type) {
 static int get_clickpos(Coord* coord) {
 	MEVENT event;
 
-	int status = get_event(&event, BUTTON1_RELEASED);
+	int status = get_event(&event, BUTTON1_CLICKED);
 	if (status == OK) {
 		coord->x = event.x;
 		coord->y = event.y;
