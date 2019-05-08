@@ -8,6 +8,6 @@ Canvas ALIEN_CANVAS;
 
 
 void init_alien();
-void update_alien();
+void update_alien(int);
 
 #endif

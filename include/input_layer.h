@@ -9,7 +9,7 @@
 Canvas INPUT_CANVAS;
 
 
-void update_input();
+void update_input(int);
 void init_input();
 
 #endif

@@ -4,9 +4,6 @@
 #include "canvas.h"
 #include "animate.h"
 
-static void add_missile(Coord target);
-static void deploy_missiles();
-
 
 void init_alien() {
     ALIEN_CANVAS.window = newwin(0, 0, 0, 0);
@@ -15,32 +12,25 @@ void init_alien() {
 }
 
 
-void update_alien() {
-    deploy_missiles();
-    update_animations(&ALIEN_CANVAS);
-    wrefresh(ALIEN_CANVAS.window);
-}
+void update_alien(int i) {
+	Sprite* sprite = &ALIEN_CANVAS.sprites[i];
 
-
-static void deploy_missiles() {
     static clock_t last_deploy;
     static int missile_count = 5;
     static double rate_limit = CLOCKS_PER_SEC;
 
-    Coord target = {.x = COLS / 2, .y = LINES / 2};
-
-    if ((double) (clock() - last_deploy) >= rate_limit && missile_count) {
-        add_missile(target);
-        last_deploy = clock();
-        --missile_count;
+    bool ready = ((double) (clock() - last_deploy) >= rate_limit);
+    if (sprite->active || !ready || !missile_count) {
+        return;
     }
-}
 
-
-static void add_missile(Coord target) {
+    Coord target = {.x = COLS / 2, .y = LINES / 2};
     Coord start = { .x = rand() % COLS, .y = 0 };
-    Sprite missile = { .view = ACS_DIAMOND };
 
-    set_animation(&missile, &start, &target);
-    add_sprite(&ALIEN_CANVAS, missile);
+    set_animation(sprite, &start, &target);
+    sprite->view = ACS_DIAMOND;
+    sprite->active = true;
+
+    last_deploy = clock();
+    --missile_count;
 }

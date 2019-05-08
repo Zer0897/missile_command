@@ -8,7 +8,7 @@ Canvas DEFENSE_CANVAS;
 
 
 void init_defense();
-void update_defense();
+void update_defense(int);
 
 
 #endif

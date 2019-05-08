@@ -22,10 +22,29 @@ void init() {
 }
 
 void update() {
-	update_input();
-	update_alien();
-	update_defense();
+	static Canvas* layers[] = {
+		&INPUT_CANVAS,
+		&ALIEN_CANVAS,
+		&DEFENSE_CANVAS
+	};
+	for (int i = 0; i < 120; i++) {
+		update_input(i);
+		update_alien(i);
+		update_defense(i);
 
+		for (int l = 0; l < 3; l++) {
+			Canvas* layer = layers[l];
+			Sprite* sprite = &layer->sprites[i];
+
+			if (sprite->active) {
+				lerp(&sprite->path);
+				draw_sprite(layer, sprite);
+			}
+		}
+	}
+	wrefresh(INPUT_CANVAS.window);
+	wrefresh(ALIEN_CANVAS.window);
+	wrefresh(DEFENSE_CANVAS.window);
 	refresh();
 }
 

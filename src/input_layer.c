@@ -7,12 +7,17 @@ static int get_event(MEVENT*, int);
 static int get_clickpos(Coord*);
 
 
-void update_input() {
+void update_input(int i) {
+	Sprite* sprite = &INPUT_CANVAS.sprites[i];
+	if (sprite->active) return;
+
     Coord click_pos;
     if (get_clickpos(&click_pos) == OK) {
-        Sprite crosshair = {.path.current = click_pos, .view = 'X'};
-		add_sprite(&INPUT_CANVAS, crosshair);
-		wrefresh(INPUT_CANVAS.window);
+        sprite->path.current = click_pos;
+		sprite->view = 'X';
+		sprite->active = true;
+		// add_sprite(&INPUT_CANVAS, crosshair);
+		// wrefresh(INPUT_CANVAS.window);
 	}
 
 }
