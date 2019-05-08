@@ -25,7 +25,7 @@ void update_defense(int i) {
 
         set_animation(missile, &start, &target->path.current);
         missile->view = ACS_DIAMOND;
-        missile->path.speed = 15;
+        missile->path.speed = 25;
         missile->active = true;
 
     } else if (cmp_eq(&missile->path.current, &missile->path.end)) {
