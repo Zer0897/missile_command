@@ -3,17 +3,6 @@
 #include "animate.h"
 
 
-// void update_sprite(Canvas* canvas, Sprite* sprite) {
-//     Coord curr = sprite->path.current;
-
-//     lerp(&sprite->path);
-//     if (!cmp_eq(&curr, &sprite->path.current)) {
-//         mvwdelch(canvas->window, curr.y, curr.x);
-//         draw_sprite(canvas, sprite);
-//     }
-// }
-
-
 void clear_sprite(Canvas* canvas, Sprite* sprite) {
     mvwdelch(canvas->window, sprite->path.current.y, sprite->path.current.x);
 }

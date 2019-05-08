@@ -16,8 +16,6 @@ void update_input(int i) {
         sprite->path.current = click_pos;
 		sprite->view = 'X';
 		sprite->active = true;
-		// add_sprite(&INPUT_CANVAS, crosshair);
-		// wrefresh(INPUT_CANVAS.window);
 	}
 
 }
