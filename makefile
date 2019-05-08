@@ -9,13 +9,14 @@ TARGET=target
 
 LIBS=-lncurses -lm
 
-_DEPS =\
+_DEPS = \
     mainloop.h \
     input_layer.h \
     animate.h \
     canvas.h \
     alien_layer.h \
-    defense_layer.h
+    defense_layer.h \
+    collision_layer.h
 
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
@@ -26,7 +27,8 @@ _OBJ = \
     animate.o \
     canvas.o \
     alien_layer.o \
-    defense_layer.o
+    defense_layer.o \
+    collision_layer.o
 
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 

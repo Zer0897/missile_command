@@ -1,7 +1,7 @@
 #include "defense_layer.h"
 #include "input_layer.h"
 #include "animate.h"
-
+#include "collision_layer.h"
 
 
 void init_defense() {
@@ -17,7 +17,8 @@ void update_defense(int i) {
     // This means we can check if a crosshair has been targeted
     // already by looking at the corresponding index.
     Sprite* target = &INPUT_CANVAS.sprites[i];
-    if (!target->active) return;
+    if (!target->active)
+        return;
 
     Sprite* missile = &DEFENSE_CANVAS.sprites[i];
     if (!missile->active) {
@@ -28,7 +29,10 @@ void update_defense(int i) {
         missile->path.speed = 25;
         missile->active = true;
 
-    } else if (cmp_eq(&missile->path.current, &missile->path.end)) {
-        missile->active = false;
+    } else if (cmp_eq(&missile->path.current, &target->path.current)) {
+        target->active = false;
+        clear_sprite(missile);
+
+        collide_input_defense(&missile->path.current);
     }
 }

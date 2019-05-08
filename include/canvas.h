@@ -31,9 +31,10 @@ typedef struct {
 } Canvas;
 
 
-void clear_sprite(Canvas*, Sprite*);
+void clear_sprite(Sprite*);
 void draw_sprite(Canvas*, Sprite*);
 void add_sprite(Canvas*, Sprite);
 void update_sprite(Canvas*, Sprite*);
+bool has_object(Canvas*, Coord*);
 
 #endif

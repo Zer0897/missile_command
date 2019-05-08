@@ -3,8 +3,10 @@
 #include "animate.h"
 
 
-void clear_sprite(Canvas* canvas, Sprite* sprite) {
-    mvwdelch(canvas->window, sprite->path.current.y, sprite->path.current.x);
+void clear_sprite(Sprite* sprite) {
+    set_animation(sprite, &sprite->path.end, &sprite->path.beg);
+    sprite->view = NULL;
+    sprite->path.speed = 50;
 }
 
 
@@ -25,4 +27,9 @@ void add_sprite(Canvas* canvas, Sprite sprite) {
             break;
         }
     }
+}
+
+
+bool has_object(Canvas* canvas, Coord* coord) {
+    return (!(bool) mvwinch(canvas->window, coord->y, coord->x));
 }

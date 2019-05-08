@@ -8,7 +8,6 @@ static bool is_smooth(Coord*, Coord*, Coord*);
 
 
 void lerp(Vector* vec) {
-    if (!vec->start_time) return;
 
     double dist = distance(&vec->beg, &vec->end);
     double total_time = dist / vec->speed;
@@ -22,7 +21,8 @@ void lerp(Vector* vec) {
             .y = vec->beg.y + (vec->end.y - vec->beg.y) * mult,
             .x = vec->beg.x + (vec->end.x - vec->beg.x) * mult
         };
-        if (next.y != vec->current.y) vec->current = next;
+        //if (next.y != vec->current.y)
+        vec->current = next;
     }
 }
 
@@ -44,10 +44,10 @@ bool cmp_gt(Coord* c1, Coord* c2) {
 }
 
 double distance(Coord* c1, Coord* c2) {
-    double dy2 = pow(abs(c2->y - c1->y), 2.0);
-    double dx2 = pow(abs(c2->x - c1->x), 2.0);
+    double dy = abs(c2->y - c1->y);
+    double dx = abs(c2->x - c1->x);
 
-    return sqrt(dy2 + dx2);
+    return hypot(dx, dy);
 }
 
 double slope(Coord* c1, Coord* c2) {
@@ -62,6 +62,16 @@ void set_animation(Sprite* sprite, Coord* start, Coord* end) {
     sprite->path.current = *start;
     sprite->path.beg = *start;
     sprite->path.end = *end;
-    sprite->path.speed = 10;
     sprite->path.start_time = clock();
+}
+
+void update_animation(Canvas* canvas, Sprite* sprite) {
+    Coord last = sprite->path.current;
+
+    if (sprite->path.start_time) {
+        // clear_sprite(canvas, sprite);
+        lerp(&sprite->path);
+    }
+
+    draw_sprite(canvas, sprite);
 }

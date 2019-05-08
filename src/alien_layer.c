@@ -30,6 +30,7 @@ void update_alien(int i) {
     set_animation(sprite, &start, &target);
     sprite->view = ACS_DIAMOND;
     sprite->active = true;
+    sprite->path.speed = 15;
 
     last_deploy = clock();
     --missile_count;
