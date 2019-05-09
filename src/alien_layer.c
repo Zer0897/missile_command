@@ -18,25 +18,19 @@ void update_alien(int i) {
 	Sprite* sprite = &ALIEN_CANVAS.sprites[i];
 
     static clock_t last_deploy;
-    static int missile_count = 10;
-    static double rate_limit = CLOCKS_PER_SEC / 2;
+    static int missile_count = 100;
+    static double rate_limit = CLOCKS_PER_SEC;
 
     bool ready = ((double) (clock() - last_deploy) >= rate_limit);
-    if (!ready || !missile_count) {
-        return;
-    }
 
-    if (sprite->active && check_collision_defense(&sprite->path.current)) {
-        clear_sprite(sprite, 100);
-
-    } else if (!sprite->active) {
+    if (!sprite->active && ready && missile_count) {
         Coord start = { .x = rand() % COLS, .y = 0 };
         Coord target = { .x = start.x, .y = LINES };
 
         set_animation(sprite, &start, &target);
         sprite->view = ACS_DIAMOND;
         sprite->active = 1;
-        sprite->path.speed = 10;
+        sprite->path.speed = 6;
 
         last_deploy = clock();
         --missile_count;

@@ -4,7 +4,8 @@
 
 
 void clear_sprite(Sprite* sprite, int speed) {
-    if (sprite->view == ' ') return;
+    if (sprite->view == ' ')
+        return;
 
     set_animation(sprite, &sprite->path.beg, &sprite->path.end);
     sprite->view = ' ';
@@ -34,5 +35,6 @@ void add_sprite(Canvas* canvas, Sprite sprite) {
 
 
 bool has_object(Canvas* canvas, Coord* coord) {
-    return (mvwinch(canvas->window, coord->y, coord->x) != ERR);
+    char c = mvwinch(canvas->window, coord->y, coord->x);
+    return (c != ERR && c != ' ');
 }

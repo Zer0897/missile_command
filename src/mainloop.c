@@ -55,12 +55,12 @@ void update() {
 
 void teardown() {
 	endwin();
-	exit(0);
 }
 
 void panic(char* str) {
-	printf("Error: %s", str);
 	teardown();
+	printf("Error: %s\n", str);
+	exit(0);
 }
 
 void mainloop() {

@@ -8,7 +8,6 @@ static bool is_smooth(Coord*, Coord*, Coord*);
 
 
 void lerp(Vector* vec) {
-
     double dist = distance(&vec->beg, &vec->end);
     double total_time = dist / vec->speed;
     double elapsed = (double) (clock() - vec->start_time) / CLOCKS_PER_SEC;
@@ -51,10 +50,10 @@ double distance(Coord* c1, Coord* c2) {
 }
 
 double slope(Coord* c1, Coord* c2) {
-    double sx = (double) c2->x - c1->x;
-    double sy = (double) c2->y - c1->y;
+    double dx = (double) c2->x - c1->x;
+    double dy = (double) c2->y - c1->y;
 
-    return (sx && sy) ? sy / sx : 0;
+    return (dx) ? dy / dx : NAN;
 }
 
 
