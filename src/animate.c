@@ -10,7 +10,7 @@ static bool is_smooth(Coord*, Coord*, Coord*);
 void lerp(Vector* vec) {
     double dist = distance(&vec->beg, &vec->end);
     double total_time = dist / vec->speed;
-    double elapsed = (double) (clock() - vec->start_time) / CLOCKS_PER_SEC;
+    double elapsed = (double) (get_nanotime() - vec->start_time) / SECOND;
     double mult = elapsed / total_time;
 
     if (mult > 1) {
@@ -61,7 +61,7 @@ void set_animation(Sprite* sprite, Coord* start, Coord* end) {
     sprite->path.current = *start;
     sprite->path.beg = *start;
     sprite->path.end = *end;
-    sprite->path.start_time = clock();
+    sprite->path.start_time = get_nanotime();
 }
 
 void update_animation(Canvas* canvas, Sprite* sprite) {
@@ -78,4 +78,11 @@ void update_animation(Canvas* canvas, Sprite* sprite) {
     } else {
         // clear_sprite(sprite);
     }
+}
+
+
+unsigned long get_nanotime() {
+    struct timespec ts;
+    timespec_get(&ts, TIME_UTC);
+    return (unsigned long) ts.tv_sec * SECOND + ts.tv_nsec;
 }

@@ -31,7 +31,7 @@ void update_collision(int i) {
 static void check_hitbox(Sprite* sprite) {
     // The easiest way to retrace our steps is to send an invisible
     // sprite in reverse.
-    Sprite hitbox = { .path.speed = 1000 };
+    Sprite hitbox = { .path.speed = 1500 };
     set_animation(&hitbox, &sprite->path.current, &sprite->path.beg);
 
     // We want to give the player a buffer, but
@@ -92,8 +92,8 @@ static void check_hitbox(Sprite* sprite) {
 
         for (int c = count - 1; c >= 0; c--) {
             if (cmp_eq(&alien->path.current, &collisions[c])) {
-                clear_sprite(alien, 200);
-                
+                clear_sprite(alien, 10);
+
                 --count;
                 break;
             }

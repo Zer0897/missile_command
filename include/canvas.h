@@ -15,7 +15,7 @@ typedef struct {
 	Coord current;
 	Coord end;
 	double speed;
-	clock_t start_time;
+	unsigned long start_time;
 } Vector;
 
 typedef struct {

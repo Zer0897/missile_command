@@ -17,22 +17,22 @@ void init_alien() {
 void update_alien(int i) {
 	Sprite* sprite = &ALIEN_CANVAS.sprites[i];
 
-    static clock_t last_deploy;
+    static long last_deploy;
     static int missile_count = 100;
-    static double rate_limit = CLOCKS_PER_SEC;
+    static int rate_limit = 2;
 
-    bool ready = ((double) (clock() - last_deploy) >= rate_limit);
+    bool ready = ((get_nanotime() - last_deploy) / SECOND >= rate_limit);
 
     if (!sprite->active && ready && missile_count) {
-        Coord start = { .x = rand() % COLS, .y = 0 };
+        Coord start = { .x = rand() % COLS, .y = 1 };
         Coord target = { .x = start.x, .y = LINES };
 
         set_animation(sprite, &start, &target);
         sprite->view = ACS_DIAMOND;
-        sprite->active = 1;
+        sprite->active = 2;
         sprite->path.speed = 6;
 
-        last_deploy = clock();
+        last_deploy = get_nanotime();
         --missile_count;
     }
 }
