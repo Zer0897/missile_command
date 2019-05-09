@@ -8,7 +8,7 @@
 
 
 void lerp(Vector*);
-void set_animation(Sprite*, Coord*, Coord*);
+void set_animation(Sprite*, Coord*, Coord*, int);
 void update_animation(Canvas*, Sprite*);
 double distance(Coord*, Coord*);
 double slope(Coord*, Coord*);

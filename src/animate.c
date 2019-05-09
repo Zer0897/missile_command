@@ -57,26 +57,27 @@ double slope(Coord* c1, Coord* c2) {
 }
 
 
-void set_animation(Sprite* sprite, Coord* start, Coord* end) {
+void set_animation(Sprite* sprite, Coord* start, Coord* end, int speed) {
     sprite->path.current = *start;
     sprite->path.beg = *start;
     sprite->path.end = *end;
+    sprite->path.speed = speed;
+    sprite->alive = true;
     sprite->path.start_time = get_nanotime();
 }
 
 void update_animation(Canvas* canvas, Sprite* sprite) {
-    if (sprite->path.start_time) {
-        // clear_sprite(canvas, sprite);
+    // if (sprite->path.start_time) {
+    //     // clear_sprite(canvas, sprite);
+    if (!cmp_eq(&sprite->path.current, &sprite->path.end)) {
         lerp(&sprite->path);
-
-        if (cmp_eq(&sprite->path.current, &sprite->path.end)) {
-            --sprite->active;
-        }
-    }
-    if (sprite->active) {
         draw_sprite(canvas, sprite);
+
+    } else if (sprite->keep_alive > 0) {
+        sprite->keep_alive -= get_nanotime() / SECOND;
+
     } else {
-        // clear_sprite(sprite);
+        sprite->alive = false;
     }
 }
 

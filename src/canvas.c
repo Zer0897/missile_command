@@ -2,15 +2,39 @@
 #include "mainloop.h"
 #include "animate.h"
 
+#include "collision_layer.h"
+#include "alien_layer.h"
+#include "input_layer.h"
+#include "defense_layer.h"
+
+
+static Sprite* get_sprite(Canvas*);
+
+
+void init_garbage_collector() {
+    GARBAGE_COLLECTOR_CANVAS.window = newwin(0, 0, 0, 0);
+}
+
+// void update_garbage_collector(int i) {
+//     Sprite* input = &INPUT_CANVAS.sprites[i];
+//     Sprite* defense = &DEFENSE_CANVAS.sprites[i];
+//     Sprite* alien = &ALIEN_CANVAS.sprites[i];
+//     Sprite* collision = &COLLISION_CANVAS.sprites[i];
+// }
+
 
 void clear_sprite(Sprite* sprite, int speed) {
-    if (sprite->view == ' ')
-        return;
+    Sprite* gc;
+    for (int i = 0; i < 120; i++) {
+        gc = &GARBAGE_COLLECTOR_CANVAS.sprites[i];
+        if (!gc->alive) {
+            gc->view = ' ';
+            set_animation(gc, &sprite->path.beg, &sprite->path.end, speed);
+            break;
+        }
+    }
 
-    set_animation(sprite, &sprite->path.beg, &sprite->path.end);
-    sprite->view = ' ';
-    sprite->active = 2;
-    sprite->path.speed = speed;
+    // set_animation(gc, &sprite->path.beg, &sprite->path.end);
 }
 
 
@@ -19,18 +43,6 @@ void draw_sprite(Canvas* canvas, Sprite* sprite) {
         canvas->window, sprite->path.current.y,
         sprite->path.current.x, sprite->view
     );
-}
-
-// Might add a sprite to the given canvas.
-// If there is no memory left, nothing will happen.
-void add_sprite(Canvas* canvas, Sprite sprite) {
-    for (int i = 0; i < 120; i++) {
-        if (canvas->sprites[i].active == false) {
-            canvas->sprites[i] = sprite;
-            canvas->sprites[i].active = true;
-            break;
-        }
-    }
 }
 
 

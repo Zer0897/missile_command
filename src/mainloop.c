@@ -21,6 +21,7 @@ void init() {
 	init_alien();
 	init_defense();
 	init_collision();
+	init_garbage_collector();
 }
 
 void update() {
@@ -28,7 +29,8 @@ void update() {
 		&INPUT_CANVAS,
 		&ALIEN_CANVAS,
 		&DEFENSE_CANVAS,
-		&COLLISION_CANVAS
+		&COLLISION_CANVAS,
+		&GARBAGE_COLLECTOR_CANVAS
 	};
 	for (int i = 0; i < 120; i++) {
 		update_input(i);
@@ -36,12 +38,14 @@ void update() {
 		update_defense(i);
 		update_collision(i);
 
-		for (int l = 0; l < 4; l++) {
+		for (int l = 0; l < 5; l++) {
 			Canvas* layer = layers[l];
 			Sprite* sprite = &layer->sprites[i];
 
-			if (sprite->active) {
+			if (sprite->alive) {
 				update_animation(layer, sprite);
+			} else if (has_object(layer, &sprite->path.current)) {
+				clear_sprite(sprite, 50);
 			}
 		}
 	}
@@ -49,6 +53,7 @@ void update() {
 	wrefresh(ALIEN_CANVAS.window);
 	wrefresh(DEFENSE_CANVAS.window);
 	wrefresh(COLLISION_CANVAS.window);
+	wrefresh(GARBAGE_COLLECTOR_CANVAS.window);
 	refresh();
 }
 

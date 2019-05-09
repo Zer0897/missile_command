@@ -15,13 +15,14 @@ typedef struct {
 	Coord current;
 	Coord end;
 	double speed;
-	unsigned long start_time;
+	long start_time;
 } Vector;
 
 typedef struct {
     int view;
     Vector path;
-    int active; // number of frames the sprite may remain static.
+    long keep_alive; // time before garbage collector gets to it
+	bool alive;
 } Sprite;
 
 
@@ -31,9 +32,11 @@ typedef struct {
 } Canvas;
 
 
+Canvas GARBAGE_COLLECTOR_CANVAS;
+
+void init_garbage_collector();
 void clear_sprite(Sprite*, int);
 void draw_sprite(Canvas*, Sprite*);
-void add_sprite(Canvas*, Sprite);
 void update_sprite(Canvas*, Sprite*);
 bool has_object(Canvas*, Coord*);
 

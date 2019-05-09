@@ -17,21 +17,19 @@ void update_defense(int i) {
     // This means we can check if a crosshair has been targeted
     // already by looking at the corresponding index.
     Sprite* target = &INPUT_CANVAS.sprites[i];
-    if (!target->active)
+    if (!target->alive)
         return;
 
     Sprite* missile = &DEFENSE_CANVAS.sprites[i];
-    if (!missile->active) {
+    if (!missile->alive) {
         Coord start = { .x = COLS / 2, .y = LINES };
 
-        set_animation(missile, &start, &target->path.current);
+        set_animation(missile, &start, &target->path.current, 80);
         missile->view = ACS_DIAMOND;
-        missile->path.speed = 80;
-        missile->active = 2;
+        missile->keep_alive = SECOND / 2;
 
-    } else if (cmp_eq(&missile->path.current, &target->path.current)) {
+    } else if (cmp_eq(&missile->path.current, &missile->path.end)) {
         collide_input_defense(&missile->path.current);
-        target->active = 0;
-        clear_sprite(missile, 150);
+        target->alive = 0;
     }
 }

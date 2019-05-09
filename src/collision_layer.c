@@ -20,19 +20,18 @@ void init_collision() {
 void update_collision(int i) {
     Sprite* sprite = &COLLISION_CANVAS.sprites[i];
 
-    if (sprite->active) {
+    if (sprite->alive) {
         check_hitbox(sprite);
-    } else if (has_object(&COLLISION_CANVAS, &sprite->path.current)) {
-        clear_sprite(sprite, 8);
     }
 }
 
 
 static void check_hitbox(Sprite* sprite) {
+    return;
     // The easiest way to retrace our steps is to send an invisible
     // sprite in reverse.
-    Sprite hitbox = { .path.speed = 1500 };
-    set_animation(&hitbox, &sprite->path.current, &sprite->path.beg);
+    Sprite hitbox;
+    set_animation(&hitbox, &sprite->path.current, &sprite->path.beg, 1000);
 
     // We want to give the player a buffer, but
     // checking every single coord around a point is expensive.
@@ -87,13 +86,12 @@ static void check_hitbox(Sprite* sprite) {
             break;
 
         Sprite* alien = &ALIEN_CANVAS.sprites[i];
-        if (!sprite->active)
+        if (!sprite->alive)
             continue;
 
         for (int c = count - 1; c >= 0; c--) {
             if (cmp_eq(&alien->path.current, &collisions[c])) {
-                clear_sprite(alien, 10);
-
+                clear_sprite(alien, 50);
                 --count;
                 break;
             }
@@ -109,11 +107,10 @@ void collide_input_defense(Coord* point) {
     for (int endpoint_count = 0; endpoint_count < 8; endpoint_count++) {
         for (int i = 0; i < 120; i++) {
             Sprite* flare = &COLLISION_CANVAS.sprites[i];
-            if (!flare->active) {
-                set_animation(flare, point, &endpoints[endpoint_count]);
+            if (!flare->alive) {
+                set_animation(flare, point, &endpoints[endpoint_count], 10);
                 flare->view = ACS_BLOCK;
-                flare->path.speed = 10;
-                flare->active = 3;
+                flare->keep_alive = SECOND;
                 break;
             }
         }
@@ -140,5 +137,4 @@ static void get_box(Coord* point, int size, Coord* out) {
     for (int i = 0; i < 8; i++) {
         out[i] = endpoints[i];
     }
-
 }
