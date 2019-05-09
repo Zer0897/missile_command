@@ -16,9 +16,7 @@ void update_input(int i) {
         sprite->path.current = click_pos;
 		sprite->view = 'X';
 		sprite->active = -1;
-
 	}
-
 }
 
 

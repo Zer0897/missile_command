@@ -32,6 +32,6 @@ void update_defense(int i) {
     } else if (cmp_eq(&missile->path.current, &target->path.current)) {
         collide_input_defense(&missile->path.current);
         target->active = 0;
-        clear_sprite(missile);
+        clear_sprite(missile, 150);
     }
 }

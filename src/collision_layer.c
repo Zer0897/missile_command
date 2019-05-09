@@ -13,11 +13,14 @@ void init_collision() {
 void update_collision(int i) {
     Sprite* sprite = &COLLISION_CANVAS.sprites[i];
 
+    if (!sprite->active && has_object(&COLLISION_CANVAS, &sprite->path.current)) {
+        clear_sprite(sprite, 8);
+    }
 }
 
 
 void collide_input_defense(Coord* point) {
-    static int size = 4;
+    static int size = 5;
 
 
     Coord endpoints[] = {
@@ -38,7 +41,7 @@ void collide_input_defense(Coord* point) {
                 set_animation(flare, point, &endpoints[endpoint_count]);
                 flare->view = ACS_BLOCK;
                 flare->path.speed = 10;
-                flare->active = 2;
+                flare->active = 3;
                 break;
             }
         }

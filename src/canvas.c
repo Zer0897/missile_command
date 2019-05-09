@@ -3,11 +3,13 @@
 #include "animate.h"
 
 
-void clear_sprite(Sprite* sprite) {
+void clear_sprite(Sprite* sprite, int speed) {
+    if (sprite->view == ' ') return;
+    
     set_animation(sprite, &sprite->path.beg, &sprite->path.end);
     sprite->view = ' ';
-    sprite->active = 1;
-    sprite->path.speed = 150;
+    sprite->active = 2;
+    sprite->path.speed = speed;
 }
 
 
@@ -32,5 +34,5 @@ void add_sprite(Canvas* canvas, Sprite sprite) {
 
 
 bool has_object(Canvas* canvas, Coord* coord) {
-    return (!(bool) mvwinch(canvas->window, coord->y, coord->x));
+    return ((bool) mvwinch(canvas->window, coord->y, coord->x));
 }
