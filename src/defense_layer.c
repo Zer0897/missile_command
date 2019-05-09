@@ -26,13 +26,12 @@ void update_defense(int i) {
 
         set_animation(missile, &start, &target->path.current);
         missile->view = ACS_DIAMOND;
-        missile->path.speed = 25;
-        missile->active = true;
+        missile->path.speed = 50;
+        missile->active = 2;
 
     } else if (cmp_eq(&missile->path.current, &target->path.current)) {
-        target->active = false;
-        clear_sprite(missile);
-
         collide_input_defense(&missile->path.current);
+        target->active = 0;
+        clear_sprite(missile);
     }
 }

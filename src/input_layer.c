@@ -1,6 +1,6 @@
 #include <ncurses.h>
-#include "input_layer.h"
 #include "canvas.h"
+#include "input_layer.h"
 
 
 static int get_event(MEVENT*, int);
@@ -15,7 +15,8 @@ void update_input(int i) {
     if (get_clickpos(&click_pos) == OK) {
         sprite->path.current = click_pos;
 		sprite->view = 'X';
-		sprite->active = true;
+		sprite->active = -1;
+
 	}
 
 }

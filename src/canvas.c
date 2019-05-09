@@ -4,9 +4,10 @@
 
 
 void clear_sprite(Sprite* sprite) {
-    set_animation(sprite, &sprite->path.end, &sprite->path.beg);
-    sprite->view = NULL;
-    sprite->path.speed = 50;
+    set_animation(sprite, &sprite->path.beg, &sprite->path.end);
+    sprite->view = ' ';
+    sprite->active = 1;
+    sprite->path.speed = 150;
 }
 
 

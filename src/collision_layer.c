@@ -38,7 +38,7 @@ void collide_input_defense(Coord* point) {
                 set_animation(flare, point, &endpoints[endpoint_count]);
                 flare->view = ACS_BLOCK;
                 flare->path.speed = 10;
-                flare->active = true;
+                flare->active = 2;
                 break;
             }
         }

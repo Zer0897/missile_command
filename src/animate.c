@@ -66,12 +66,17 @@ void set_animation(Sprite* sprite, Coord* start, Coord* end) {
 }
 
 void update_animation(Canvas* canvas, Sprite* sprite) {
-    Coord last = sprite->path.current;
-
     if (sprite->path.start_time) {
         // clear_sprite(canvas, sprite);
         lerp(&sprite->path);
-    }
 
-    draw_sprite(canvas, sprite);
+        if (cmp_eq(&sprite->path.current, &sprite->path.end)) {
+            --sprite->active;
+        }
+    }
+    if (sprite->active) {
+        draw_sprite(canvas, sprite);
+    } else {
+        // clear_sprite(sprite);
+    }
 }

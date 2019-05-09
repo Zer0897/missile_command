@@ -21,7 +21,7 @@ typedef struct {
 typedef struct {
     int view;
     Vector path;
-    bool active;
+    int active; // number of frames the sprite may remain static.
 } Sprite;
 
 
