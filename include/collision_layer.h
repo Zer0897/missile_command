@@ -5,7 +5,8 @@
 #include "canvas.h"
 
 
-Canvas COLLISION_CANVAS;
+Canvas COLLISION_CANVAS, HITBOX_CANVAS;
+
 
 void init_collision();
 void update_collision(int);

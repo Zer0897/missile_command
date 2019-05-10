@@ -24,12 +24,15 @@ void init_garbage_collector() {
 
 
 void clear_sprite(Sprite* sprite, int speed) {
+    if (sprite->view == ' ')
+        return;
+
     Sprite* gc;
     for (int i = 0; i < 120; i++) {
         gc = &GARBAGE_COLLECTOR_CANVAS.sprites[i];
         if (!gc->alive) {
             gc->view = ' ';
-            set_animation(gc, &sprite->path.beg, &sprite->path.end, speed);
+            set_animation(gc, &sprite->path.beg, &sprite->path.current, speed);
             break;
         }
     }

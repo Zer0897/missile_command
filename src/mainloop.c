@@ -44,9 +44,10 @@ void update() {
 
 			if (sprite->alive) {
 				update_animation(layer, sprite);
-			} else if (has_object(layer, &sprite->path.current)) {
-				clear_sprite(sprite, 50);
 			}
+			// else if (has_object(layer, &sprite->path.current)) {
+			// 	clear_sprite(sprite, 80);
+			// }
 		}
 	}
 	wrefresh(INPUT_CANVAS.window);

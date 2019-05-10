@@ -27,18 +27,21 @@ void update_collision(int i) {
 
 
 static void check_hitbox(Sprite* sprite) {
-    return;
     // The easiest way to retrace our steps is to send an invisible
     // sprite in reverse.
-    Sprite hitbox;
-    set_animation(&hitbox, &sprite->path.current, &sprite->path.beg, 1000);
+
+    // Sprite hitbox;
+    // set_animation(&hitbox, &sprite->path.current, &sprite->path.beg, 2000);
 
     // We want to give the player a buffer, but
     // checking every single coord around a point is expensive.
     // Instead, we find the perpendicular slope to check the
     // two coords on either side.
+    Coord end = sprite->path.current;
+    Coord curr = sprite->path.beg;
+
     double perp_slope;
-    double curr_slope = slope(&hitbox.path.beg, &hitbox.path.end);
+    double curr_slope = slope(&curr, &end);
     if (isnan(curr_slope)) {
         perp_slope = 0;
     } else if (!curr_slope) {
@@ -49,20 +52,28 @@ static void check_hitbox(Sprite* sprite) {
 
     // Now we send our hitbox sprite down the flare's trail.
     // If it finds an alien, it adds its coord to the `collisions` array.
+
     int count = 0;
     Coord collisions[15];
-    Coord* curr = &hitbox.path.current;
-    while (!cmp_eq(curr, &hitbox.path.end) && count < 15) {
-        Coord p1 = { .y = curr->y, .x = curr->x + 1 };
-        Coord p2 = { .y = curr->y, .x = curr->x - 1 };
+    int directionx = (end.x - curr.x > 0) ? 1 : -1;
+    int directiony = (end.y - curr.y > 0) ? 1 : -1;
+    while (!cmp_eq(&curr, &end) && count < 15) {
+        if (!isnan(curr_slope)) {
+            curr.x += directionx;
+            curr.y = curr_slope * curr.x + end.y;
+        } else {
+            curr.y += directiony;
+        }
+        Coord p1 = { .y = curr.y, .x = curr.x + 1 };
+        Coord p2 = { .y = curr.y, .x = curr.x - 1 };
 
         if (!isnan(perp_slope)) {
             p1.y += perp_slope * p1.x;
             p2.y += perp_slope * p2.x;
         }
 
-        if (check_collision_alien(curr)) {
-            collisions[count++] = *curr;
+        if (check_collision_alien(&curr)) {
+            collisions[count++] = curr;
         }
 
         if (check_collision_alien(&p1)) {
@@ -72,8 +83,8 @@ static void check_hitbox(Sprite* sprite) {
         if (check_collision_alien(&p2)) {
             collisions[count++] = p2;
         }
-
-        lerp(&hitbox.path);
+        mvprintw(0, 0, "%d, %d %d, %f", curr.y, curr.x, end.y, curr_slope);
+        refresh();
     }
 
     // There's no good way to get a sprite directly from coordinates,
@@ -91,7 +102,7 @@ static void check_hitbox(Sprite* sprite) {
 
         for (int c = count - 1; c >= 0; c--) {
             if (cmp_eq(&alien->path.current, &collisions[c])) {
-                clear_sprite(alien, 50);
+                alien->path.end = alien->path.current;
                 --count;
                 break;
             }
@@ -110,7 +121,7 @@ void collide_input_defense(Coord* point) {
             if (!flare->alive) {
                 set_animation(flare, point, &endpoints[endpoint_count], 10);
                 flare->view = ACS_BLOCK;
-                flare->keep_alive = SECOND;
+                flare->keep_alive = SECOND * 1.2;
                 break;
             }
         }
