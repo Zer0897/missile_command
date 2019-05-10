@@ -30,13 +30,15 @@ void update() {
 		&ALIEN_CANVAS,
 		&DEFENSE_CANVAS,
 		&COLLISION_CANVAS,
-		&GARBAGE_COLLECTOR_CANVAS
+		&GARBAGE_COLLECTOR_CANVAS,
 	};
+
 	for (int i = 0; i < 120; i++) {
 		update_input(i);
 		update_alien(i);
 		update_defense(i);
-		update_collision(i);
+		// update_collision(i);
+		update_garbage_collector(i);
 
 		for (int l = 0; l < 5; l++) {
 			Canvas* layer = layers[l];
@@ -45,15 +47,12 @@ void update() {
 			if (sprite->alive) {
 				update_animation(layer, sprite);
 			}
-			// else if (has_object(layer, &sprite->path.current)) {
-			// 	clear_sprite(sprite, 80);
-			// }
 		}
 	}
+	wrefresh(COLLISION_CANVAS.window);
 	wrefresh(INPUT_CANVAS.window);
 	wrefresh(ALIEN_CANVAS.window);
 	wrefresh(DEFENSE_CANVAS.window);
-	wrefresh(COLLISION_CANVAS.window);
 	wrefresh(GARBAGE_COLLECTOR_CANVAS.window);
 	refresh();
 }

@@ -19,7 +19,7 @@ typedef struct {
 } Vector;
 
 typedef struct {
-    int view;
+    chtype view;
     Vector path;
     long keep_alive; // time before garbage collector gets to it
 	bool alive;
@@ -35,6 +35,7 @@ typedef struct {
 Canvas GARBAGE_COLLECTOR_CANVAS;
 
 void init_garbage_collector();
+void update_garbage_collector(int);
 void clear_sprite(Sprite*, int);
 void draw_sprite(Canvas*, Sprite*);
 void update_sprite(Canvas*, Sprite*);

@@ -23,6 +23,21 @@ void update_alien(int i) {
 
     bool ready = ((get_nanotime() - last_deploy) / SECOND >= rate_limit);
 
+    if (sprite->alive) {
+        Coord hitbox[8];
+
+        get_box(&sprite->path.current, 1, &hitbox);
+        for (int i = 0; i < 8; i++) {
+            if (check_collision_alien(&hitbox[i])) {
+            // if (has_object(&COLLISION_CANVAS, &hitbox[i])) {
+                sprite->alive = false;
+                clear_sprite(sprite, 160);
+                // getch();
+                break;
+            }
+        }
+    }
+
     if (!sprite->alive && ready && missile_count) {
         Coord start = { .x = rand() % COLS, .y = 1 };
         Coord target = { .x = start.x, .y = LINES };

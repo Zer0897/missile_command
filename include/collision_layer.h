@@ -5,9 +5,9 @@
 #include "canvas.h"
 
 
-Canvas COLLISION_CANVAS, HITBOX_CANVAS;
+Canvas COLLISION_CANVAS;
 
-
+void get_box(Coord*, int, Coord*);
 void init_collision();
 void update_collision(int);
 void collide_input_defense(Coord*);

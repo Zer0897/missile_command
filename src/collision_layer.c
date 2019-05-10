@@ -7,7 +7,6 @@
 #include "mainloop.h"
 
 
-static void get_box(Coord*, int, Coord*);
 static void check_hitbox(Sprite*);
 
 
@@ -18,109 +17,18 @@ void init_collision() {
 }
 
 void update_collision(int i) {
-    Sprite* sprite = &COLLISION_CANVAS.sprites[i];
-
-    if (sprite->alive) {
-        check_hitbox(sprite);
-    }
-}
-
-
-static void check_hitbox(Sprite* sprite) {
-    // The easiest way to retrace our steps is to send an invisible
-    // sprite in reverse.
-
-    // Sprite hitbox;
-    // set_animation(&hitbox, &sprite->path.current, &sprite->path.beg, 2000);
-
-    // We want to give the player a buffer, but
-    // checking every single coord around a point is expensive.
-    // Instead, we find the perpendicular slope to check the
-    // two coords on either side.
-    Coord end = sprite->path.current;
-    Coord curr = sprite->path.beg;
-
-    double perp_slope;
-    double curr_slope = slope(&curr, &end);
-    if (isnan(curr_slope)) {
-        perp_slope = 0;
-    } else if (!curr_slope) {
-        perp_slope = NAN;
-    } else {
-        perp_slope = -1 / curr_slope;
-    }
-
-    // Now we send our hitbox sprite down the flare's trail.
-    // If it finds an alien, it adds its coord to the `collisions` array.
-
-    int count = 0;
-    Coord collisions[15];
-    int directionx = (end.x - curr.x > 0) ? 1 : -1;
-    int directiony = (end.y - curr.y > 0) ? 1 : -1;
-    while (!cmp_eq(&curr, &end) && count < 15) {
-        if (!isnan(curr_slope)) {
-            curr.x += directionx;
-            curr.y = curr_slope * curr.x + end.y;
-        } else {
-            curr.y += directiony;
-        }
-        Coord p1 = { .y = curr.y, .x = curr.x + 1 };
-        Coord p2 = { .y = curr.y, .x = curr.x - 1 };
-
-        if (!isnan(perp_slope)) {
-            p1.y += perp_slope * p1.x;
-            p2.y += perp_slope * p2.x;
-        }
-
-        if (check_collision_alien(&curr)) {
-            collisions[count++] = curr;
-        }
-
-        if (check_collision_alien(&p1)) {
-            collisions[count++] = p1;
-        }
-
-        if (check_collision_alien(&p2)) {
-            collisions[count++] = p2;
-        }
-        mvprintw(0, 0, "%d, %d %d, %f", curr.y, curr.x, end.y, curr_slope);
-        refresh();
-    }
-
-    // There's no good way to get a sprite directly from coordinates,
-    // so we have to (expensively) iterate over all of the
-    // alien sprites and check if it matches any of the collisions.
-    // The good news is `count` will rarely be above 2 or 3, so
-    // the worst case scenario is unlikely.
-    for (int i = 0; i < 120; i++) {
-        if (!count)
-            break;
-
-        Sprite* alien = &ALIEN_CANVAS.sprites[i];
-        if (!sprite->alive)
-            continue;
-
-        for (int c = count - 1; c >= 0; c--) {
-            if (cmp_eq(&alien->path.current, &collisions[c])) {
-                alien->path.end = alien->path.current;
-                --count;
-                break;
-            }
-        }
-    }
 }
 
 
 void collide_input_defense(Coord* point) {
     Coord endpoints[8];
-    get_box(point, 5, endpoints);
-
+    get_box(point, 4, endpoints);
     for (int endpoint_count = 0; endpoint_count < 8; endpoint_count++) {
         for (int i = 0; i < 120; i++) {
             Sprite* flare = &COLLISION_CANVAS.sprites[i];
             if (!flare->alive) {
                 set_animation(flare, point, &endpoints[endpoint_count], 10);
-                flare->view = ACS_BLOCK;
+                flare->view = '*';
                 flare->keep_alive = SECOND * 1.2;
                 break;
             }
@@ -130,11 +38,24 @@ void collide_input_defense(Coord* point) {
 
 
 bool check_collision_alien(Coord* point) {
-    return has_object(&ALIEN_CANVAS, point);
+    char c = mvwinch(COLLISION_CANVAS.window, point->y, point->x);
+    return (c == '*');
 }
 
-
-static void get_box(Coord* point, int size, Coord* out) {
+/*
+ * Get the surrounding points in an area `size`, starting from `point`. Place
+ * them in the given array `out`.
+ *
+ * Params:
+ *  point : Coord*
+ *      The starting center of the box.
+ *  size : int
+ *      Size of box to get.
+ *  Out : Coord*
+ *      A pointer to an array with 8 Coord positions. All sides and corners
+ *      of the box are places in this array.
+*/
+void get_box(Coord* point, int size, Coord* out) {
     Coord endpoints[] = {
         { .y = point->y + size, .x = point->x }, // top
         { .y = point->y - size, .x = point->x }, // bottom

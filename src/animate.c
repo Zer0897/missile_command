@@ -67,9 +67,8 @@ void set_animation(Sprite* sprite, Coord* start, Coord* end, int speed) {
 }
 
 void update_animation(Canvas* canvas, Sprite* sprite) {
-    // if (sprite->path.start_time) {
-    //     // clear_sprite(canvas, sprite);
     draw_sprite(canvas, sprite);
+
     if (!cmp_eq(&sprite->path.current, &sprite->path.end)) {
         lerp(&sprite->path);
 
@@ -78,7 +77,7 @@ void update_animation(Canvas* canvas, Sprite* sprite) {
         long elapsed = get_nanotime() - sprite->path.start_time;
         if (sprite->keep_alive < elapsed - travel_time) {
             sprite->alive = false;
-            clear_sprite(sprite, 80);
+            clear_sprite(sprite, 160);
         }
     }
 }
