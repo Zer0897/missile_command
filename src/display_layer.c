@@ -18,11 +18,17 @@ static void update_base() {
     for (int i = 0; i < 3; i++) {
         struct Base* base = bases[i];
 
-        int topy = base->position.y - 3;
-        int leftx = base->position.x - 2;
-        int rightx = base->position.x + 2;
+        int topy = base->position.y - 4;
+        int leftx = base->position.x - 5;
+        int rightx = base->position.x + 5;
 
-        mvwhline(DISPLAY, topy, leftx, '-', rightx - leftx);
+        mvwaddch(DISPLAY, topy, leftx, ACS_ULCORNER);
+        mvwhline(DISPLAY, topy, leftx + 1, ACS_HLINE, 9);
+        mvwaddch(DISPLAY, topy, rightx, ACS_URCORNER);
+        mvwvline(DISPLAY, topy + 1, rightx, ACS_VLINE, LINES - topy - 1);
+        mvwvline(DISPLAY, topy + 1, leftx, ACS_VLINE, LINES - topy - 1);
+
+        mvwprintw(DISPLAY, topy + 2, leftx + 3, "%d ", base->missile_count);
     }
 }
 

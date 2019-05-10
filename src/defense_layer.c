@@ -4,7 +4,7 @@
 #include "collision_layer.h"
 
 
-static Coord get_launchpoint(Coord*);
+static struct Base* get_launchpoint(Coord*);
 
 void init_defense() {
     DEFENSE_CANVAS.window = newwin(0, 0, 0, 0);
@@ -19,6 +19,10 @@ void init_defense() {
     BASE_LEFT.position.y = LINES;
     BASE_MID.position.y = LINES;
     BASE_RIGHT.position.y = LINES;
+
+    BASE_LEFT.missile_count = 25;
+    BASE_MID.missile_count = 25;
+    BASE_RIGHT.missile_count = 25;
 }
 
 
@@ -34,10 +38,13 @@ void update_defense(int i) {
     Sprite* missile = &DEFENSE_CANVAS.sprites[i];
     if (!missile->alive) {
 
-        Coord start = get_launchpoint(&target->path.current);
-        set_animation(missile, &start, &target->path.current, 80);
-        missile->view = ACS_DIAMOND;
-        missile->keep_alive = SECOND * .5;
+        struct Base* base = get_launchpoint(&target->path.current);
+        if (base->missile_count) {
+            set_animation(missile, &base->position, &target->path.current, 80);
+            missile->view = ACS_DIAMOND;
+            missile->keep_alive = SECOND * .5;
+            --base->missile_count;
+        }
 
     } else if (cmp_eq(&missile->path.current, &missile->path.end)) {
         collide_input_defense(&missile->path.current);
@@ -46,18 +53,17 @@ void update_defense(int i) {
 }
 
 
-static Coord get_launchpoint(Coord* target) {
+static struct Base* get_launchpoint(Coord* target) {
     struct Base* bases[] = {&BASE_MID, &BASE_RIGHT};
 
-    Coord start = BASE_LEFT.position;
-    double dist = distance(&start, target);
+    struct Base* base = &BASE_LEFT;
+    double dist = distance(&base->position, target);
     for (int i = 0; i < 2; i++) {
         double d = distance(&bases[i]->position, target);
-        if (d < dist) {
+        if (d < dist || !base->missile_count) {
             dist = d;
-            start = bases[i]->position;
+            base = bases[i];
         }
     }
-
-    return start;
+    return base;
 }
