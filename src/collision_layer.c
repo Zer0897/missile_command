@@ -69,3 +69,22 @@ void get_box(Coord* point, int size, Coord out[8]) {
         out[i] = endpoints[i];
     }
 }
+
+
+bool check_hitbox(Canvas* canvas, Coord* point, int size) {
+    if (size == 0) {
+        return false;
+    }
+
+    Coord box[8];
+    get_box(point, size, &box);
+
+    for (int i = 0; i < 8; i++) {
+        if (has_object(canvas, &box[i])) {
+            return true;
+        }
+    }
+
+    return check_hitbox(canvas, point, size - 1);
+
+}

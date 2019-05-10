@@ -23,22 +23,21 @@ static void update_window_cleaner() {
     static int x = 0;
     static int y = 0;
 
-    Coord box[16];
+    // Coord box[8];
     Coord point = { .y = y, .x = x };
-    get_box(&point, 1, &box);
-    get_box(&point, 2, box + 8);
+    // get_box(&point, 2, &box);
 
     int neighbor_count = 0;
     for (int l = 0; l < 4; l++) {
-
-        for (int b = 0; b < 16; b++) {
-            if (has_object(layers[l], &box[b])) {
+        // for (int b = 0; b < 8; b++) {
+            if (check_hitbox(layers[l], &point, 5)) {
+            // if (has_object(layers[l], &box[b])) {
                 ++neighbor_count;
             }
-        }
+        // }
 
-        if (neighbor_count < 3) {
-            // draw(layers[l], &point, ' ');
+        if (neighbor_count < 2) {
+            draw(layers[l], &point, ' ');
         }
 
         neighbor_count = 0;
@@ -81,8 +80,8 @@ void update_garbage_collector(int i) {
     //         draw(layers[l], &sprite->path.current, sprite->view);
     //     }
     // }
-    update_window_cleaner();
     if (sprite->alive) {
+        // update_window_cleaner();
         Coord box[8];
         get_box(&sprite->path.current, 1, &box);
 
