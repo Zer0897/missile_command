@@ -23,6 +23,7 @@ void init() {
 	init_defense();
 	init_collision();
 	init_garbage_collector();
+	init_display();
 }
 
 void update() {
@@ -39,6 +40,7 @@ void update() {
 		update_alien(i);
 		update_defense(i);
 		update_garbage_collector(i);
+		update_display();
 
 		for (int l = 0; l < 5; l++) {
 			Canvas* layer = layers[l];

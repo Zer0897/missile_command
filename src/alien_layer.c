@@ -4,6 +4,7 @@
 #include "canvas.h"
 #include "animate.h"
 #include "collision_layer.h"
+#include "display_layer.h"
 
 
 
@@ -29,10 +30,10 @@ void update_alien(int i) {
         get_box(&sprite->path.current, 1, &hitbox);
         for (int i = 0; i < 8; i++) {
             if (check_collision_alien(&hitbox[i])) {
-            // if (has_object(&COLLISION_CANVAS, &hitbox[i])) {
                 sprite->alive = false;
                 clear_sprite(sprite, 160);
-                // getch();
+
+                add_score(10);
                 break;
             }
         }

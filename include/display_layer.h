@@ -9,5 +9,6 @@ WINDOW
 
 void init_display();
 void update_display();
+void add_score(int);
 
 #endif

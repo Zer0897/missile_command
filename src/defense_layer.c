@@ -4,10 +4,21 @@
 #include "collision_layer.h"
 
 
+static Coord get_launchpoint(Coord*);
+
 void init_defense() {
     DEFENSE_CANVAS.window = newwin(0, 0, 0, 0);
     init_pair(3, COLOR_BLUE, COLOR_BLACK);
     wattron(DEFENSE_CANVAS.window, COLOR_PAIR(3));
+
+    int buff = (int) ((double) COLS) * 0.8 / 2;
+    BASE_LEFT.position.x = buff / 2;
+    BASE_MID.position.x = COLS / 2;
+    BASE_RIGHT.position.x = COLS - buff / 2;
+
+    BASE_LEFT.position.y = LINES;
+    BASE_MID.position.y = LINES;
+    BASE_RIGHT.position.y = LINES;
 }
 
 
@@ -22,26 +33,8 @@ void update_defense(int i) {
 
     Sprite* missile = &DEFENSE_CANVAS.sprites[i];
     if (!missile->alive) {
-        int b = (int) ((double) COLS) * 0.9;
-        int b1, b2, b3;
-        b1 = (COLS - b) / 2;
-        b2 = COLS / 2;
-        b3 = COLS - b1;
 
-        Coord start1 = { .x = b1, .y = LINES };
-        Coord start2 = { .x = b2, .y = LINES };
-        Coord start3 = { .x = b3, .y = LINES };
-
-        Coord start = start1;
-
-        if (distance(&start, &target->path.current) > distance(&start2, &target->path.current)) {
-            start = start2;
-        }
-
-        if (distance(&start, &target->path.current) > distance(&start3, &target->path.current)) {
-            start = start3;
-        }
-
+        Coord start = get_launchpoint(&target->path.current);
         set_animation(missile, &start, &target->path.current, 80);
         missile->view = ACS_DIAMOND;
         missile->keep_alive = SECOND * .5;
@@ -50,4 +43,21 @@ void update_defense(int i) {
         collide_input_defense(&missile->path.current);
         target->alive = 0;
     }
+}
+
+
+static Coord get_launchpoint(Coord* target) {
+    struct Base* bases[] = {&BASE_MID, &BASE_RIGHT};
+
+    Coord start = BASE_LEFT.position;
+    double dist = distance(&start, target);
+    for (int i = 0; i < 2; i++) {
+        double d = distance(&bases[i]->position, target);
+        if (d < dist) {
+            dist = d;
+            start = bases[i]->position;
+        }
+    }
+
+    return start;
 }
