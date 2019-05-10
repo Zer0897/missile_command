@@ -60,7 +60,7 @@ static struct Base* get_launchpoint(Coord* target) {
     double dist = distance(&base->position, target);
     for (int i = 0; i < 2; i++) {
         double d = distance(&bases[i]->position, target);
-        if (d < dist || !base->missile_count) {
+        if (d < dist || (bases[i]->missile_count && !base->missile_count)) {
             dist = d;
             base = bases[i];
         }
