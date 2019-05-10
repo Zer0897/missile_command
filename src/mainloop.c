@@ -8,6 +8,7 @@
 #include "alien_layer.h"
 #include "defense_layer.h"
 #include "collision_layer.h"
+#include "display_layer.h"
 
 
 void init() {
@@ -37,7 +38,6 @@ void update() {
 		update_input(i);
 		update_alien(i);
 		update_defense(i);
-		// update_collision(i);
 		update_garbage_collector(i);
 
 		for (int l = 0; l < 5; l++) {
@@ -54,6 +54,9 @@ void update() {
 	wrefresh(ALIEN_CANVAS.window);
 	wrefresh(DEFENSE_CANVAS.window);
 	wrefresh(GARBAGE_COLLECTOR_CANVAS.window);
+
+	wrefresh(DISPLAY);
+
 	refresh();
 }
 

@@ -7,7 +7,7 @@
 void init_defense() {
     DEFENSE_CANVAS.window = newwin(0, 0, 0, 0);
     init_pair(3, COLOR_BLUE, COLOR_BLACK);
-    wattron(DEFENSE_CANVAS.window, COLOR_PAIR(3)); // same as crosshair color;
+    wattron(DEFENSE_CANVAS.window, COLOR_PAIR(3));
 }
 
 

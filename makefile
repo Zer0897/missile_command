@@ -16,7 +16,8 @@ _DEPS = \
     canvas.h \
     alien_layer.h \
     defense_layer.h \
-    collision_layer.h
+    collision_layer.h \
+    display_layer.h
 
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
@@ -28,7 +29,8 @@ _OBJ = \
     canvas.o \
     alien_layer.o \
     defense_layer.o \
-    collision_layer.o
+    collision_layer.o \
+    display_layer.o
 
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
