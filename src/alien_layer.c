@@ -19,7 +19,7 @@ void update_alien(int i) {
 
     static long last_deploy;
     static int missile_count = 100;
-    static int rate_limit = 1.5;
+    static int rate_limit = 3;
 
     bool ready = ((get_nanotime() - last_deploy) / SECOND >= rate_limit);
 

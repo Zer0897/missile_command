@@ -7,7 +7,6 @@
 #include "mainloop.h"
 
 
-static void check_hitbox(Sprite*);
 
 
 void init_collision() {
@@ -55,7 +54,7 @@ bool check_collision_alien(Coord* point) {
  *      A pointer to an array with 8 Coord positions. All sides and corners
  *      of the box are places in this array.
 */
-void get_box(Coord* point, int size, Coord* out) {
+void get_box(Coord* point, int size, Coord out[8]) {
     Coord endpoints[] = {
         { .y = point->y + size, .x = point->x }, // top
         { .y = point->y - size, .x = point->x }, // bottom

@@ -44,7 +44,7 @@ void update_defense(int i) {
 
         set_animation(missile, &start, &target->path.current, 80);
         missile->view = ACS_DIAMOND;
-        missile->keep_alive = SECOND / 2;
+        missile->keep_alive = SECOND * .5;
 
     } else if (cmp_eq(&missile->path.current, &missile->path.end)) {
         collide_input_defense(&missile->path.current);
