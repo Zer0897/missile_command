@@ -19,7 +19,7 @@ void update_alien(int i) {
 
     static long last_deploy;
     static int missile_count = 100;
-    static int rate_limit = 2;
+    static int rate_limit = 1.5;
 
     bool ready = ((get_nanotime() - last_deploy) / SECOND >= rate_limit);
 
@@ -39,10 +39,10 @@ void update_alien(int i) {
     }
 
     if (!sprite->alive && ready && missile_count) {
-        Coord start = { .x = rand() % COLS, .y = 1 };
-        Coord target = { .x = start.x, .y = LINES };
+        Coord start = { .x = rand() % COLS, .y = 0 };
+        Coord target = { .x = rand() % COLS, .y = LINES };
 
-        set_animation(sprite, &start, &target, 6);
+        set_animation(sprite, &start, &target, 10);
         sprite->view = ACS_DIAMOND;
 
         last_deploy = get_nanotime();
