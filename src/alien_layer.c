@@ -8,7 +8,11 @@
 #include "mainloop.h"
 
 
-static int missile_count = 5;
+static int missile_count = 45;
+
+int alien_ammo() {
+    return missile_count;
+}
 
 
 void init_alien() {
@@ -31,17 +35,11 @@ void update_alien(int i) {
     bool ready = ((get_nanotime() - last_deploy) / SECOND >= rate_limit);
 
     if (sprite->alive) {
-        Coord hitbox[8];
-
-        get_box(&sprite->path.current, 1, &hitbox);
-        for (int i = 0; i < 8; i++) {
-            if (check_collision_alien(&hitbox[i])) {
-                sprite->alive = false;
-                clear_sprite(sprite, 160);
-
-                add_score(10);
-                break;
-            }
+        if (check_hitbox(&COLLISION_CANVAS, &sprite->path.current, 1)) {
+            sprite->alive = false;
+            clear_sprite(sprite, 160);
+            add_score(10);
+            --missile_count;
         }
     } else if (!sprite->alive && ready && missile_count) {
         Coord start = { .x = rand() % COLS, .y = 0 };
@@ -51,8 +49,5 @@ void update_alien(int i) {
         sprite->view = ACS_DIAMOND;
 
         last_deploy = get_nanotime();
-        --missile_count;
-    } else if (!missile_count) {
-        end_round();
     }
 }

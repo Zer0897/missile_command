@@ -11,7 +11,7 @@
 #include "display_layer.h"
 
 
-static bool running = true;
+bool running = true;
 
 static Canvas* layers[] = {
 	&INPUT_CANVAS,
@@ -42,7 +42,6 @@ void init() {
 
 void update() {
 	for (int i = 0; i < 120; i++) {
-
 		update_input(i);
 		update_alien(i);
 		update_defense(i);
@@ -57,17 +56,19 @@ void update() {
 				update_animation(layer, sprite);
 			}
 		}
-		if (!running) break;
 	}
 	wrefresh(COLLISION_CANVAS.window);
 	wrefresh(INPUT_CANVAS.window);
 	wrefresh(ALIEN_CANVAS.window);
 	wrefresh(DEFENSE_CANVAS.window);
 	wrefresh(GARBAGE_COLLECTOR_CANVAS.window);
-
 	wrefresh(DISPLAY);
-
 	refresh();
+
+
+	if (!alien_ammo()) {
+		running = false;
+	}
 }
 
 
@@ -85,6 +86,7 @@ void mainloop() {
 	init();
 	while (1) {
 		start_round();
+		// getch();
 		reset_round();
 	}
 	teardown();
@@ -92,7 +94,6 @@ void mainloop() {
 
 
 static void start_round() {
-	running = true;
 	while (running) {
 		update();
 	}
@@ -111,8 +112,4 @@ static void reset_round() {
 	reset_alien();
 	increment_round();
 	running = true;
-}
-
-void end_round() {
-	running = false;
 }
