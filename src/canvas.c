@@ -119,7 +119,7 @@ void draw_sprite(Canvas* canvas, Sprite* sprite) {
 
 
 bool has_object(Canvas* canvas, Coord* coord) {
-    chtype c = mvwinch(canvas->window, coord->y, coord->x);
+    char c = mvwinch(canvas->window, coord->y, coord->x);
     return (c != ERR && c != ' ');
 }
 

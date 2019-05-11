@@ -39,7 +39,6 @@ void update_alien(int i) {
             sprite->alive = false;
             clear_sprite(sprite, 160);
             add_score(10);
-            --missile_count;
         }
     } else if (!sprite->alive && ready && missile_count) {
         Coord start = { .x = rand() % COLS, .y = 0 };
@@ -49,5 +48,6 @@ void update_alien(int i) {
         sprite->view = ACS_DIAMOND;
 
         last_deploy = get_nanotime();
+        --missile_count;
     }
 }
