@@ -19,10 +19,14 @@ void init_defense() {
     BASE_LEFT.position.y = LINES;
     BASE_MID.position.y = LINES;
     BASE_RIGHT.position.y = LINES;
+    reset_defense();
+}
 
-    BASE_LEFT.missile_count = 25;
-    BASE_MID.missile_count = 25;
-    BASE_RIGHT.missile_count = 25;
+
+void reset_defense() {
+    BASE_LEFT.missile_count = 15;
+    BASE_MID.missile_count = 15;
+    BASE_RIGHT.missile_count = 15;
 }
 
 

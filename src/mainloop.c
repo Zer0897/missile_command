@@ -11,6 +11,20 @@
 #include "display_layer.h"
 
 
+static bool running = true;
+
+static Canvas* layers[] = {
+	&INPUT_CANVAS,
+	&ALIEN_CANVAS,
+	&DEFENSE_CANVAS,
+	&COLLISION_CANVAS,
+	&GARBAGE_COLLECTOR_CANVAS,
+};
+
+static void start_round();
+static void reset_round();
+
+
 void init() {
 	srand(time(NULL)); // seed for random events.
 	initscr();
@@ -27,15 +41,8 @@ void init() {
 }
 
 void update() {
-	static Canvas* layers[] = {
-		&INPUT_CANVAS,
-		&ALIEN_CANVAS,
-		&DEFENSE_CANVAS,
-		&COLLISION_CANVAS,
-		&GARBAGE_COLLECTOR_CANVAS,
-	};
-
 	for (int i = 0; i < 120; i++) {
+
 		update_input(i);
 		update_alien(i);
 		update_defense(i);
@@ -50,6 +57,7 @@ void update() {
 				update_animation(layer, sprite);
 			}
 		}
+		if (!running) break;
 	}
 	wrefresh(COLLISION_CANVAS.window);
 	wrefresh(INPUT_CANVAS.window);
@@ -75,10 +83,36 @@ void panic(char* str) {
 
 void mainloop() {
 	init();
-
-    bool running = true;
-    while (running) {
-		update();
+	while (1) {
+		start_round();
+		reset_round();
 	}
 	teardown();
+}
+
+
+static void start_round() {
+	running = true;
+	while (running) {
+		update();
+	}
+}
+
+static void reset_round() {
+	for (int l = 0; l < 5; l++) {
+		Canvas* layer = layers[l];
+		for (int i = 0; i < 120; i++) {
+			layer->sprites[i].alive = false;
+		}
+		wclear(layer->window);
+	}
+	clear();
+	reset_defense();
+	reset_alien();
+	increment_round();
+	running = true;
+}
+
+void end_round() {
+	running = false;
 }

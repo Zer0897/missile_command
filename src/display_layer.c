@@ -2,15 +2,16 @@
 #include "display_layer.h"
 #include "defense_layer.h"
 
-
+static int total = 0;
 static int score = 0;
+static int round = 1;
 
 
 static void update_score() {
     int x = COLS / 2;
     int y = 1;
 
-    mvwprintw(DISPLAY, y, x, "Score %d", score);
+    mvwprintw(DISPLAY, y, x, "Score %d ", score);
 }
 
 static void update_base() {
@@ -47,4 +48,14 @@ void update_display() {
 
 void add_score(int x) {
     score += x;
+}
+
+void increment_round() {
+    total += score;
+    score = 0;
+    ++round;
+}
+
+int get_round() {
+    return round;
 }

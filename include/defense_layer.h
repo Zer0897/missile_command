@@ -14,6 +14,7 @@ struct Base {
 
 void init_defense();
 void update_defense(int);
+void reset_defense();
 
 
 #endif
