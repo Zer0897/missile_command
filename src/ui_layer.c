@@ -112,30 +112,30 @@ void destroy_building() {
 
 
 void increment_round() {
-    long timebuff = get_nanotime();
+    long timebuff = get_time();
 
     for (int i = 0; i < 3; i++) {
         while (bases[i]->missile_count) {
-            if (get_nanotime() - timebuff > SECOND / 8) {
+            if (get_time() - timebuff > SECOND / 8) {
                 --bases[i]->missile_count;
                 score += 125;
-                timebuff = get_nanotime();
+                timebuff = get_time();
             }
             mvprintw(LINES / 2, COLS / 2, "Success!");
             update();
         }
     }
 
-    timebuff = get_nanotime();
+    timebuff = get_time();
     for (int i = 0; i < 10; i++) {
         if (buildings[i]) {
             score += 300;
             buildings[i] = 0;
         }
-        while (get_nanotime() - timebuff < SECOND / 3) {
+        while (get_time() - timebuff < SECOND / 3) {
             update();
         }
-        timebuff = get_nanotime();
+        timebuff = get_time();
     }
     for (int i = 0; i < 10; i++) {
         buildings[i] = 1;

@@ -46,7 +46,7 @@ void update_alien(int i) {
     double difficulty_factor = 1 + log10((double) get_round());
     double rate_limit = 0.5 + 1 / difficulty_factor;
     double animation_speed = 8 + 2 * difficulty_factor;
-    bool ready = ((get_nanotime() - last_deploy) / SECOND >= rate_limit);
+    bool ready = ((get_time() - last_deploy) / SECOND >= rate_limit);
 
 	Sprite* sprite = &ALIEN_CANVAS.sprites[i];
     if (sprite->alive) {
@@ -60,11 +60,11 @@ void update_alien(int i) {
             destroy_building();
             ++hit_count;
 
-        } else if (get_nanotime() - last_split > SECOND * 20) {
+        } else if (get_time() - last_split > SECOND * 20) {
             if (get_round() > 1) {
                 split_alien(sprite);
             }
-            last_split = get_nanotime();
+            last_split = get_time();
         }
     } else if (ready && missile_count) {
         Coord start = { .x = rand() % COLS, .y = 0 };
@@ -72,7 +72,7 @@ void update_alien(int i) {
 
         set_animation(sprite, &start, &target, 8 + 2 * log10(get_round()));
         sprite->view = ACS_DIAMOND;
-        last_deploy = get_nanotime();
+        last_deploy = get_time();
         --missile_count;
     }
 }

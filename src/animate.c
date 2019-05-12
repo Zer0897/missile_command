@@ -1,4 +1,4 @@
-#include <time.h>
+#include <sys/time.h>
 #include <stdlib.h>
 #include <math.h>
 #include "animate.h"
@@ -7,7 +7,7 @@
 void lerp(Vector* vec) {
     double dist = distance(&vec->beg, &vec->end);
     double total_time = dist / vec->speed;
-    double elapsed = (double) (get_nanotime() - vec->start_time) / SECOND;
+    double elapsed = (double) (get_time() - vec->start_time) / SECOND;
     double mult = elapsed / total_time;
 
     if (mult > 1) {
@@ -52,7 +52,7 @@ void set_animation(Sprite* sprite, Coord* start, Coord* end, int speed) {
     sprite->path.end = *end;
     sprite->path.speed = speed;
     sprite->alive = true;
-    sprite->path.start_time = get_nanotime();
+    sprite->path.start_time = get_time();
 }
 
 void update_animation(Canvas* canvas, Sprite* sprite) {
@@ -63,7 +63,7 @@ void update_animation(Canvas* canvas, Sprite* sprite) {
 
     } else {
         long travel_time = (long int) distance(&sprite->path.beg, &sprite->path.end) / sprite->path.speed;
-        long elapsed = get_nanotime() - sprite->path.start_time;
+        long elapsed = get_time() - sprite->path.start_time;
         if (sprite->keep_alive < elapsed - travel_time) {
             sprite->alive = false;
             clear_sprite(canvas, sprite);
@@ -77,8 +77,8 @@ bool is_animation_done(Sprite* sprite) {
 }
 
 
-unsigned long get_nanotime() {
-    struct timespec ts;
-    timespec_get(&ts, TIME_UTC);
-    return (unsigned long) ts.tv_sec * SECOND + ts.tv_nsec;
+unsigned long get_time() {
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    return (unsigned long) tv.tv_sec * SECOND + tv.tv_usec;
 }

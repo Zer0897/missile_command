@@ -4,7 +4,7 @@
 #include <ncurses.h>
 #include "canvas.h"
 
-#define SECOND 1000000000L
+#define SECOND 1000000L
 
 
 void lerp(Vector*);
@@ -15,7 +15,7 @@ double slope(Coord*, Coord*);
 bool cmp_eq(Coord*, Coord*);
 bool cmp_gt(Coord*, Coord*);
 bool is_animation_done(Sprite*);
-unsigned long get_nanotime();
+unsigned long get_time();
 
 
 
