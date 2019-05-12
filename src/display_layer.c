@@ -55,6 +55,7 @@ void init_display() {
 void update_display() {
     update_score();
     update_base();
+    mvwprintw(DISPLAY, 1, COLS - 10, "Round %d ", round);
 }
 
 
@@ -73,10 +74,9 @@ void increment_round() {
             if (get_nanotime() - timebuff > SECOND / 10) {
                 --bases[i]->missile_count;
                 score += 125;
-                // update_display();
-                // wrefresh(DISPLAY);
                 timebuff = get_nanotime();
             }
+            mvprintw(LINES / 2, COLS / 2, "Success!");
             update();
         }
     }
