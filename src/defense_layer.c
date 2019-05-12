@@ -3,7 +3,7 @@
 #include "animate.h"
 #include "collision_layer.h"
 
-
+static const int defense_arsenal = 10;
 static struct Base* get_launchpoint(Coord*);
 
 void init_defense() {
@@ -24,26 +24,21 @@ void init_defense() {
 
 
 void reset_defense() {
-    BASE_LEFT.missile_count = 15;
-    BASE_MID.missile_count = 15;
-    BASE_RIGHT.missile_count = 15;
+    BASE_LEFT.missile_count = defense_arsenal;
+    BASE_MID.missile_count = defense_arsenal;
+    BASE_RIGHT.missile_count = defense_arsenal;
 }
 
 
 void update_defense(int i) {
-    // The missile canvas will always match the index
-    // for a given crosshair from the input canvas.
-    // This means we can check if a crosshair has been targeted
-    // already by looking at the corresponding index.
     Sprite* target = &INPUT_CANVAS.sprites[i];
     if (!target->alive)
         return;
 
     Sprite* missile = &DEFENSE_CANVAS.sprites[i];
     if (!missile->alive) {
-
         struct Base* base = get_launchpoint(&target->path.current);
-        if (base->missile_count) {
+        if (base) {
             set_animation(missile, &base->position, &target->path.current, 80);
             missile->view = ACS_DIAMOND;
             missile->keep_alive = SECOND * .5;
@@ -58,16 +53,21 @@ void update_defense(int i) {
 
 
 static struct Base* get_launchpoint(Coord* target) {
-    struct Base* bases[] = {&BASE_MID, &BASE_RIGHT};
+    struct Base* bases[] = {&BASE_LEFT, &BASE_MID, &BASE_RIGHT};
+    struct Base* base = NULL;
+    for (int i = 0; i < 3; i++) {
+        if (!bases[i]->missile_count)
+            continue;
 
-    struct Base* base = &BASE_LEFT;
-    double dist = distance(&base->position, target);
-    for (int i = 0; i < 2; i++) {
-        double d = distance(&bases[i]->position, target);
-        if (d < dist || (bases[i]->missile_count && !base->missile_count)) {
-            dist = d;
+        if (base) {
+            double dist_curr = distance(&base->position, target);
+            double dist_next = distance(&bases[i]->position, target);
+            if (dist_next < dist_curr)
+                base = bases[i];
+
+        } else
             base = bases[i];
-        }
     }
+
     return base;
 }

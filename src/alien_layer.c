@@ -9,7 +9,7 @@
 #include "mainloop.h"
 
 // The total missile for a round.
-static const int total_missiles = 45;
+static const int total_missiles = 30;
 // The number of missile left in the alien arsenal.
 static int missile_count = total_missiles;
 // The number of missile that have been either
