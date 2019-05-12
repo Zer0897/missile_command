@@ -74,7 +74,7 @@ bool check_hitbox(Canvas* canvas, Coord* point, int size) {
     }
 
     Coord box[8];
-    get_box(point, size, &box);
+    get_box(point, size, box);
     for (int i = 0; i < 8; i++) {
         if (has_object(canvas, &box[i])) {
             return true;

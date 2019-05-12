@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "canvas.h"
 #include "main.h"
 #include "animate.h"
@@ -26,7 +27,7 @@ void clear_sprite(Canvas* canvas, Sprite* sprite) {
     gc.path.end.y += (dy) ? dy / abs(dy) : 0;
 
     while (!is_animation_done(&gc)) {
-        get_box(&gc.path.current, 1, &box);
+        get_box(&gc.path.current, 1, box);
         for (int b = 0; b < 8; b++) {
             mvwaddch(canvas->window, box[b].y, box[b].x, gc.view);
         }
