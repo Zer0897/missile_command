@@ -9,7 +9,7 @@ WINDOW *DISPLAY;
 void init_display();
 void update_display();
 void add_score(int);
-void destory_building();
+void destroy_building();
 int get_round();
 void increment_round();
 

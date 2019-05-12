@@ -1,4 +1,5 @@
 #include <strings.h>
+#include <string.h>
 #include "display_layer.h"
 #include "defense_layer.h"
 #include "mainloop.h"
@@ -6,13 +7,14 @@
 
 
 
-static int score = 0;
+static long int score = 0;
 static int round = 1;
-static int buildings[10];
+static int buildings[10] = { [0 ... 9] = 1 };
 static struct Base* bases[] = {&BASE_LEFT, &BASE_MID, &BASE_RIGHT};
 
 
 static void draw_building(Coord*, int);
+static void clear_building(Coord*, int);
 
 
 static void update_score() {
@@ -33,6 +35,20 @@ static void update_base() {
     }
 }
 
+static void update_buildings() {
+    int xincrement = COLS * .8 / 10;
+    Coord pos = { .x = xincrement * 2, .y = LINES };
+    for (int i = 0; i < 10; i++) {
+        if (buildings[i]) {
+            draw_building(&pos, 1);
+        } else {
+            clear_building(&pos, 1);
+        }
+        pos.x += xincrement;
+    }
+}
+
+
 static void draw_building(Coord* position, int size) {
     int topy = position->y - size;
     int leftx = position->x - size * 1.5;
@@ -45,6 +61,20 @@ static void draw_building(Coord* position, int size) {
     mvwvline(DISPLAY, topy + 1, leftx, ACS_VLINE, LINES - topy - 1);
 }
 
+
+static void clear_building(Coord* position, int size) {
+    int topy = position->y - size;
+    int leftx = position->x - size * 1.5;
+    int rightx = position->x + size * 1.5;
+
+    mvwaddch(DISPLAY, topy, leftx, ' ');
+    mvwhline(DISPLAY, topy, leftx + 1, ' ', size * 3 - 1);
+    mvwaddch(DISPLAY, topy, rightx, ' ');
+    mvwvline(DISPLAY, topy + 1, rightx, ' ', LINES - topy - 1);
+    mvwvline(DISPLAY, topy + 1, leftx, ' ', LINES - topy - 1);
+}
+
+
 void init_display() {
     DISPLAY = newwin(0, 0, 0, 0);
     init_pair(5, COLOR_CYAN, COLOR_BLACK);
@@ -53,6 +83,7 @@ void init_display() {
 
 
 void update_display() {
+    update_buildings();
     update_score();
     update_base();
     mvwprintw(DISPLAY, 1, COLS - 10, "Round %d ", round);
@@ -64,12 +95,18 @@ void add_score(int val) {
 }
 
 void destroy_building() {
-
+    for (int i = 0; i < 10; i++) {
+        if (buildings[i]) {
+            buildings[i] = 0;
+            break;
+        }
+    }
 }
 
+
 void increment_round() {
+    long timebuff = get_nanotime();
     for (int i = 0; i < 3; i++) {
-        long timebuff = get_nanotime();
         while (bases[i]->missile_count) {
             if (get_nanotime() - timebuff > SECOND / 10) {
                 --bases[i]->missile_count;
@@ -79,6 +116,20 @@ void increment_round() {
             mvprintw(LINES / 2, COLS / 2, "Success!");
             update();
         }
+    }
+    timebuff = get_nanotime();
+    for (int i = 0; i < 10; i++) {
+        if (buildings[i]) {
+            score += 300;
+            buildings[i] = 0;
+        }
+        while (get_nanotime() - timebuff < SECOND / 3) {
+            update();
+        }
+        timebuff = get_nanotime();
+    }
+    for (int i = 0; i < 10; i++) {
+        buildings[i] = 1;
     }
     reset_defense();
     ++round;

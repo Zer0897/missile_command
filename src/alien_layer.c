@@ -47,6 +47,7 @@ void update_alien(int i) {
             add_score(100);
             ++hit_count;
         } else if (is_animation_done(sprite)) {
+            destroy_building();
             ++hit_count;
         }
     } else if (ready && missile_count) {
