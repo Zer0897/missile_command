@@ -1,5 +1,6 @@
 #include <time.h>
 #include <stdlib.h>
+#include <math.h>
 #include "alien_layer.h"
 #include "canvas.h"
 #include "animate.h"
@@ -7,11 +8,17 @@
 #include "display_layer.h"
 #include "mainloop.h"
 
+// The total missile for a round.
+static const int total_missiles = 45;
+// The number of missile left in the alien arsenal.
+static int missile_count = total_missiles;
+// The number of missile that have been either
+// destroyed or hit the ground.
+static int hit_count = 0;
 
-static int missile_count = 45;
-
-int alien_ammo() {
-    return missile_count;
+// Arsenal is depleted and there are no more active missiles.
+bool is_alien_done() {
+    return (!missile_count && hit_count == total_missiles);
 }
 
 
@@ -22,25 +29,27 @@ void init_alien() {
 }
 
 void reset_alien() {
-    missile_count = 45;
+    missile_count = total_missiles;
+    hit_count = 0;
 }
 
 
 void update_alien(int i) {
-	Sprite* sprite = &ALIEN_CANVAS.sprites[i];
-
     static long last_deploy;
-    int rate_limit = 1.5;
-
+    int rate_limit = 2 - log10((double) get_round());
     bool ready = ((get_nanotime() - last_deploy) / SECOND >= rate_limit);
 
+	Sprite* sprite = &ALIEN_CANVAS.sprites[i];
     if (sprite->alive) {
         if (check_hitbox(&COLLISION_CANVAS, &sprite->path.current, 1)) {
             sprite->alive = false;
             clear_sprite(sprite, 160);
             add_score(10);
+            ++hit_count;
+        } else if (is_animation_done(sprite)) {
+            ++hit_count;
         }
-    } else if (!sprite->alive && ready && missile_count) {
+    } else if (ready && missile_count) {
         Coord start = { .x = rand() % COLS, .y = 0 };
         Coord target = { .x = rand() % COLS, .y = LINES };
 

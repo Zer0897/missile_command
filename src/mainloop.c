@@ -66,7 +66,7 @@ void update() {
 	refresh();
 
 
-	if (!alien_ammo()) {
+	if (is_alien_done()) {
 		running = false;
 	}
 }

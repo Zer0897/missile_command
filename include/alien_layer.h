@@ -10,6 +10,6 @@ Canvas ALIEN_CANVAS;
 void reset_alien();
 void init_alien();
 void update_alien(int);
-int alien_ammo();
+bool is_alien_done();
 
 #endif

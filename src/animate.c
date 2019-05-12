@@ -4,7 +4,7 @@
 #include "animate.h"
 
 
-static bool is_smooth(Coord*, Coord*, Coord*);
+// static bool is_smooth(Coord*, Coord*, Coord*);
 
 
 void lerp(Vector* vec) {
@@ -26,12 +26,12 @@ void lerp(Vector* vec) {
 }
 
 
-static bool is_smooth(Coord* c1, Coord* c2, Coord* end) {
-    int s1 = (int) slope(c1, end);
-    int s2 = (int) slope(c2, end);
+// static bool is_smooth(Coord* c1, Coord* c2, Coord* end) {
+//     int s1 = (int) slope(c1, end);
+//     int s2 = (int) slope(c2, end);
 
-    return (s1 == s2);
-}
+//     return (s1 == s2);
+// }
 
 bool cmp_eq(Coord* c1, Coord* c2) {
     return (c1->y == c2->y && c1->x == c2->x);
@@ -69,7 +69,7 @@ void set_animation(Sprite* sprite, Coord* start, Coord* end, int speed) {
 void update_animation(Canvas* canvas, Sprite* sprite) {
     draw_sprite(canvas, sprite);
 
-    if (!cmp_eq(&sprite->path.current, &sprite->path.end)) {
+    if (!is_animation_done(sprite)) {
         lerp(&sprite->path);
 
     } else {
@@ -80,6 +80,11 @@ void update_animation(Canvas* canvas, Sprite* sprite) {
             clear_sprite(sprite, 160);
         }
     }
+}
+
+
+bool is_animation_done(Sprite* sprite) {
+    return (cmp_eq(&sprite->path.current, &sprite->path.end));
 }
 
 
