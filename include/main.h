@@ -4,7 +4,7 @@
 void setup();
 void panic();
 void teardown();
-void main();
+int main();
 void update();
 
 #endif

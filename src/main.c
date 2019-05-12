@@ -79,7 +79,7 @@ void panic(char* str) {
 	exit(0);
 }
 
-void main() {
+int main() {
 	init();
 	while (1) {
 		start_round();
@@ -87,6 +87,7 @@ void main() {
 		reset_round();
 	}
 	teardown();
+	return 0;
 }
 
 
