@@ -5,13 +5,16 @@
 #include "canvas.h"
 #include "animate.h"
 #include "collision_layer.h"
-#include "display_layer.h"
-#include "mainloop.h"
+#include "ui_layer.h"
+#include "main.h"
 
 // The total missile for a round.
+// Split missiles are not counted.
 static const int total_missiles = 30;
+
 // The number of missile left in the alien arsenal.
 static int missile_count = total_missiles;
+
 // The number of missile that have been either
 // destroyed or hit the ground.
 static int hit_count = 0;
@@ -40,16 +43,18 @@ void reset_alien() {
 void update_alien(int i) {
     static long last_deploy;
     static long last_split;
+
     int rate_limit = 2 - log10((double) get_round());
     bool ready = ((get_nanotime() - last_deploy) / SECOND >= rate_limit);
-
 	Sprite* sprite = &ALIEN_CANVAS.sprites[i];
     if (sprite->alive) {
+
         if (check_hitbox(&COLLISION_CANVAS, &sprite->path.current, 1)) {
             sprite->alive = false;
             clear_sprite(sprite, 160);
             add_score(100);
             ++hit_count;
+
         } else if (is_animation_done(sprite)) {
             destroy_building();
             ++hit_count;
@@ -62,9 +67,8 @@ void update_alien(int i) {
         Coord start = { .x = rand() % COLS, .y = 0 };
         Coord target = { .x = rand() % COLS, .y = LINES };
 
-        set_animation(sprite, &start, &target, 7 + 2 * log10(get_round()));
+        set_animation(sprite, &start, &target, 8 + 2 * log10(get_round()));
         sprite->view = ACS_DIAMOND;
-
         last_deploy = get_nanotime();
         --missile_count;
     }

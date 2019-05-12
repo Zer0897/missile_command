@@ -4,7 +4,7 @@
 #include "collision_layer.h"
 #include "alien_layer.h"
 #include "animate.h"
-#include "mainloop.h"
+#include "main.h"
 
 
 

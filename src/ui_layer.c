@@ -1,9 +1,9 @@
 #include <strings.h>
 #include <string.h>
 #include <stdlib.h>
-#include "display_layer.h"
+#include "ui_layer.h"
 #include "defense_layer.h"
-#include "mainloop.h"
+#include "main.h"
 #include "animate.h"
 
 

@@ -1,10 +1,10 @@
-#ifndef MAINLOOP_H
-#define MAINLOOP_H
+#ifndef MAIN_H
+#define MAIN_H
 
 void setup();
 void panic();
 void teardown();
-void mainloop();
+void main();
 void update();
 
 #endif

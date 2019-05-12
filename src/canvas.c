@@ -1,5 +1,5 @@
 #include "canvas.h"
-#include "mainloop.h"
+#include "main.h"
 #include "animate.h"
 
 #include "collision_layer.h"
