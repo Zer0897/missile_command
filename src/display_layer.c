@@ -6,6 +6,9 @@ static int total = 0;
 static int score = 0;
 static int round = 1;
 
+static int building_count = 10;
+static void draw_building(Coord*, int);
+
 
 static void update_score() {
     int x = COLS / 2;
@@ -19,24 +22,32 @@ static void update_base() {
     for (int i = 0; i < 3; i++) {
         struct Base* base = bases[i];
 
-        int topy = base->position.y - 4;
-        int leftx = base->position.x - 5;
-        int rightx = base->position.x + 5;
-
-        mvwaddch(DISPLAY, topy, leftx, ACS_ULCORNER);
-        mvwhline(DISPLAY, topy, leftx + 1, ACS_HLINE, 9);
-        mvwaddch(DISPLAY, topy, rightx, ACS_URCORNER);
-        mvwvline(DISPLAY, topy + 1, rightx, ACS_VLINE, LINES - topy - 1);
-        mvwvline(DISPLAY, topy + 1, leftx, ACS_VLINE, LINES - topy - 1);
-
-        mvwprintw(DISPLAY, topy + 2, leftx + 3, "%d ", base->missile_count);
+        draw_building(&base->position, 5);
+        mvwprintw(
+            DISPLAY,
+            base->position.y - 2,
+            base->position.x,
+            "%d ", base->missile_count
+        );
     }
 }
 
+static void draw_building(Coord* position, int size) {
+    int topy = position->y - size;
+    int leftx = position->x - size;
+    int rightx = position->x + size;
+
+    mvwaddch(DISPLAY, topy, leftx, ACS_ULCORNER);
+    mvwhline(DISPLAY, topy, leftx + 1, ACS_HLINE, size * 2 - 1);
+    mvwaddch(DISPLAY, topy, rightx, ACS_URCORNER);
+    mvwvline(DISPLAY, topy + 1, rightx, ACS_VLINE, LINES - topy - 1);
+    mvwvline(DISPLAY, topy + 1, leftx, ACS_VLINE, LINES - topy - 1);
+}
 
 void init_display() {
     DISPLAY = newwin(0, 0, 0, 0);
-    // init_pair(5, COLOR_GREEN, COLOR_BLACK);
+    init_pair(5, COLOR_CYAN, COLOR_BLACK);
+    wattron(DISPLAY, COLOR_PAIR(5));
 }
 
 
@@ -46,8 +57,8 @@ void update_display() {
 }
 
 
-void add_score(int x) {
-    score += x;
+void add_score(int val) {
+    score += val;
 }
 
 void increment_round() {
