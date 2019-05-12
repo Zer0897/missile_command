@@ -16,9 +16,12 @@ static int missile_count = total_missiles;
 // destroyed or hit the ground.
 static int hit_count = 0;
 
+
+static void split_alien(Sprite*);
+
 // Arsenal is depleted and there are no more active missiles.
 bool is_alien_done() {
-    return (!missile_count && hit_count == total_missiles);
+    return (!missile_count && hit_count >= total_missiles);
 }
 
 
@@ -36,6 +39,7 @@ void reset_alien() {
 
 void update_alien(int i) {
     static long last_deploy;
+    static long last_split;
     int rate_limit = 2 - log10((double) get_round());
     bool ready = ((get_nanotime() - last_deploy) / SECOND >= rate_limit);
 
@@ -49,15 +53,45 @@ void update_alien(int i) {
         } else if (is_animation_done(sprite)) {
             destroy_building();
             ++hit_count;
+
+        } else if (get_nanotime() - last_split > SECOND * 20) {
+            split_alien(sprite);
+            last_split = get_nanotime();
         }
     } else if (ready && missile_count) {
         Coord start = { .x = rand() % COLS, .y = 0 };
         Coord target = { .x = rand() % COLS, .y = LINES };
 
-        set_animation(sprite, &start, &target, 7 + 10 * log10(get_round()));
+        set_animation(sprite, &start, &target, 7 + 2 * log10(get_round()));
         sprite->view = ACS_DIAMOND;
 
         last_deploy = get_nanotime();
         --missile_count;
+    }
+}
+
+
+static void split_alien(Sprite* sprite) {
+    sprite->alive = false;
+    clear_sprite(sprite, 5);
+    --hit_count;
+
+    int currx = sprite->path.current.x;
+    Coord targets[] = {
+        { .x = rand() % currx, .y = LINES },
+        { .x = currx + rand() % (COLS - currx), .y = LINES }
+    };
+
+    int count = 0;
+    for (int i = 0; i < 120; i++) {
+        Sprite* next = &ALIEN_CANVAS.sprites[i];
+        if (!next->alive) {
+            set_animation(next, &sprite->path.current, &targets[count], sprite->path.speed);
+            next->view = sprite->view;
+            ++count;
+        }
+
+        if (count > 1)
+            break;
     }
 }
