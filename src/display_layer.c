@@ -1,5 +1,6 @@
 #include <strings.h>
 #include <string.h>
+#include <stdlib.h>
 #include "display_layer.h"
 #include "defense_layer.h"
 #include "mainloop.h"
@@ -95,11 +96,17 @@ void add_score(int val) {
 }
 
 void destroy_building() {
+    int found = false;
     for (int i = 0; i < 10; i++) {
         if (buildings[i]) {
             buildings[i] = 0;
+            found = true;
             break;
         }
+    }
+    if (!found) {
+        teardown();
+        exit(0);
     }
 }
 
