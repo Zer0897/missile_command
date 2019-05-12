@@ -113,6 +113,7 @@ void destroy_building() {
 
 void increment_round() {
     long timebuff = get_nanotime();
+
     for (int i = 0; i < 3; i++) {
         while (bases[i]->missile_count) {
             if (get_nanotime() - timebuff > SECOND / 10) {
@@ -124,6 +125,7 @@ void increment_round() {
             update();
         }
     }
+
     timebuff = get_nanotime();
     for (int i = 0; i < 10; i++) {
         if (buildings[i]) {
@@ -138,6 +140,7 @@ void increment_round() {
     for (int i = 0; i < 10; i++) {
         buildings[i] = 1;
     }
+
     reset_defense();
     ++round;
 }

@@ -8,7 +8,6 @@ static int get_clickpos(Coord*);
 
 
 void update_input(int i) {
-
 	Sprite* sprite = &INPUT_CANVAS.sprites[i];
 	if (sprite->alive) return;
 

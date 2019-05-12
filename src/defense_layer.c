@@ -3,7 +3,7 @@
 #include "animate.h"
 #include "collision_layer.h"
 
-static const int defense_arsenal = 12;
+static const int defense_arsenal = 15;
 static struct Base* get_launchpoint(Coord*);
 
 void init_defense() {

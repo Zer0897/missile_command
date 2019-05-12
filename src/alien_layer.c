@@ -24,7 +24,7 @@ static void split_alien(Sprite*);
 
 // Arsenal is depleted and there are no more active missiles.
 bool is_alien_done() {
-    return (!missile_count && hit_count >= total_missiles);
+    return (!missile_count && hit_count >= total_missiles); // Missiles may count twice when split.
 }
 
 
@@ -44,7 +44,9 @@ void update_alien(int i) {
     static long last_deploy;
     static long last_split;
 
-    int rate_limit = 2 - log10((double) get_round());
+    double difficulty_factor = 1 + log10((double) get_round());
+    double rate_limit = 0.5 + 1 / difficulty_factor;
+    double animation_speed = 8 + difficulty_factor;
     bool ready = ((get_nanotime() - last_deploy) / SECOND >= rate_limit);
 	Sprite* sprite = &ALIEN_CANVAS.sprites[i];
     if (sprite->alive) {
@@ -60,7 +62,9 @@ void update_alien(int i) {
             ++hit_count;
 
         } else if (get_nanotime() - last_split > SECOND * 20) {
-            split_alien(sprite);
+            if (get_round() > 1) {
+                split_alien(sprite);
+            }
             last_split = get_nanotime();
         }
     } else if (ready && missile_count) {
@@ -77,7 +81,7 @@ void update_alien(int i) {
 
 static void split_alien(Sprite* sprite) {
     sprite->alive = false;
-    clear_sprite(sprite, 5);
+    clear_sprite(sprite, 80);
     --hit_count;
 
     int currx = sprite->path.current.x;
