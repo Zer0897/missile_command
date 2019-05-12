@@ -57,6 +57,7 @@ void update() {
 			}
 		}
 	}
+
 	wrefresh(COLLISION_CANVAS.window);
 	wrefresh(INPUT_CANVAS.window);
 	wrefresh(ALIEN_CANVAS.window);

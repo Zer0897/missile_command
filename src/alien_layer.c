@@ -9,7 +9,7 @@
 #include "mainloop.h"
 
 // The total missile for a round.
-static const int total_missiles = 2;
+static const int total_missiles = 30;
 // The number of missile left in the alien arsenal.
 static int missile_count = total_missiles;
 // The number of missile that have been either
@@ -54,7 +54,7 @@ void update_alien(int i) {
         Coord start = { .x = rand() % COLS, .y = 0 };
         Coord target = { .x = rand() % COLS, .y = LINES };
 
-        set_animation(sprite, &start, &target, 8 + get_round());
+        set_animation(sprite, &start, &target, 7 + 10 * log10(get_round()));
         sprite->view = ACS_DIAMOND;
 
         last_deploy = get_nanotime();
