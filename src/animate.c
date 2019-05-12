@@ -76,13 +76,7 @@ bool is_animation_done(Sprite* sprite) {
     return (cmp_eq(&sprite->path.current, &sprite->path.end));
 }
 
-#ifndef __CYGWIN32__
-unsigned long get_time() {
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    return (unsigned long) tv.tv_sec * SECOND + tv.tv_usec;
-}
-#else
+#if defined(_WIN32) || defined(WIN32) || defined(__CYGWIN32__)
 #include <windows.h>
 unsigned long get_time() {
     static LARGE_INTEGER freq, start;
@@ -97,5 +91,10 @@ unsigned long get_time() {
     double seconds = (double)(count.QuadPart - start.QuadPart) / freq.QuadPart;
     return seconds * SECOND;
 }
-
+#else
+unsigned long get_time() {
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    return (unsigned long) tv.tv_sec * SECOND + tv.tv_usec;
+}
 #endif

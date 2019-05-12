@@ -17,7 +17,7 @@ void clear_sprite(Canvas* canvas, Sprite* sprite) {
 
     Coord box[8];
     Sprite gc = { .view = ' ' };
-    set_animation(&gc, &sprite->path.beg, &sprite->path.current, 10000);
+    set_animation(&gc, &sprite->path.beg, &sprite->path.current, 1000);
 
     // Increment the end one further.
     int dx = gc.path.end.x - gc.path.beg.x;
