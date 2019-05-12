@@ -9,7 +9,7 @@
 #include "mainloop.h"
 
 // The total missile for a round.
-static const int total_missiles = 30;
+static const int total_missiles = 2;
 // The number of missile left in the alien arsenal.
 static int missile_count = total_missiles;
 // The number of missile that have been either
@@ -44,7 +44,7 @@ void update_alien(int i) {
         if (check_hitbox(&COLLISION_CANVAS, &sprite->path.current, 1)) {
             sprite->alive = false;
             clear_sprite(sprite, 160);
-            add_score(10);
+            add_score(100);
             ++hit_count;
         } else if (is_animation_done(sprite)) {
             ++hit_count;

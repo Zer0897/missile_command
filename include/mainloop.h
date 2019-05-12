@@ -5,5 +5,6 @@ void setup();
 void panic();
 void teardown();
 void mainloop();
+void update();
 
 #endif

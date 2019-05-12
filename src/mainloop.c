@@ -100,6 +100,7 @@ static void start_round() {
 }
 
 static void reset_round() {
+	increment_round();
 	for (int l = 0; l < 5; l++) {
 		Canvas* layer = layers[l];
 		for (int i = 0; i < 120; i++) {
@@ -107,9 +108,7 @@ static void reset_round() {
 		}
 		wclear(layer->window);
 	}
-	clear();
-	reset_defense();
 	reset_alien();
-	increment_round();
+	clear();
 	running = true;
 }
