@@ -64,10 +64,8 @@ static struct Base* get_launchpoint(Coord* target) {
             double dist_next = distance(&bases[i]->position, target);
             if (dist_next < dist_curr)
                 base = bases[i];
-
         } else
             base = bases[i];
     }
-
     return base;
 }
