@@ -15,9 +15,6 @@ void init_collision() {
     wattron(COLLISION_CANVAS.window, COLOR_PAIR(4));
 }
 
-void update_collision(int i) {
-}
-
 
 void collide_input_defense(Coord* point) {
     Coord endpoints[8];
