@@ -29,8 +29,8 @@ static void update_base() {
         draw_building(&base->position, 5);
         mvwprintw(
             DISPLAY,
-            base->position.y - 2,
-            base->position.x,
+            base->position.y - 4,
+            base->position.x - 6,
             "%d ", base->missile_count
         );
     }
@@ -116,7 +116,7 @@ void increment_round() {
 
     for (int i = 0; i < 3; i++) {
         while (bases[i]->missile_count) {
-            if (get_nanotime() - timebuff > SECOND / 10) {
+            if (get_nanotime() - timebuff > SECOND / 8) {
                 --bases[i]->missile_count;
                 score += 125;
                 timebuff = get_nanotime();

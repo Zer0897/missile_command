@@ -77,7 +77,7 @@ void update_animation(Canvas* canvas, Sprite* sprite) {
         long elapsed = get_nanotime() - sprite->path.start_time;
         if (sprite->keep_alive < elapsed - travel_time) {
             sprite->alive = false;
-            clear_sprite(sprite, 160);
+            clear_sprite(canvas, sprite);
         }
     }
 }

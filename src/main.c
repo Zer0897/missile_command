@@ -18,7 +18,6 @@ static Canvas* layers[] = {
 	&ALIEN_CANVAS,
 	&DEFENSE_CANVAS,
 	&COLLISION_CANVAS,
-	&GARBAGE_COLLECTOR_CANVAS,
 };
 
 static void start_round();
@@ -36,7 +35,6 @@ void init() {
 	init_alien();
 	init_defense();
 	init_collision();
-	init_garbage_collector();
 	init_display();
 }
 
@@ -45,10 +43,9 @@ void update() {
 		update_input(i);
 		update_alien(i);
 		update_defense(i);
-		update_garbage_collector(i);
 		update_display();
 
-		for (int l = 0; l < 5; l++) {
+		for (int l = 0; l < 4; l++) {
 			Canvas* layer = layers[l];
 			Sprite* sprite = &layer->sprites[i];
 
@@ -62,7 +59,6 @@ void update() {
 	wrefresh(INPUT_CANVAS.window);
 	wrefresh(ALIEN_CANVAS.window);
 	wrefresh(DEFENSE_CANVAS.window);
-	wrefresh(GARBAGE_COLLECTOR_CANVAS.window);
 	wrefresh(DISPLAY);
 	refresh();
 
@@ -103,7 +99,7 @@ static void start_round() {
 static void reset_round() {
 	increment_round();
 	wclear(DISPLAY);
-	for (int l = 0; l < 5; l++) {
+	for (int l = 0; l < 4; l++) {
 		Canvas* layer = layers[l];
 		for (int i = 0; i < 120; i++) {
 			layer->sprites[i].alive = false;

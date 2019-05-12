@@ -32,11 +32,7 @@ typedef struct {
 } Canvas;
 
 
-Canvas GARBAGE_COLLECTOR_CANVAS;
-
-void init_garbage_collector();
-void update_garbage_collector(int);
-void clear_sprite(Sprite*, int);
+void clear_sprite(Canvas*, Sprite*);
 void draw_sprite(Canvas*, Sprite*);
 void update_sprite(Canvas*, Sprite*);
 bool has_object(Canvas*, Coord*);

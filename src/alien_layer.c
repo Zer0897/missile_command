@@ -10,7 +10,7 @@
 
 // The total missile for a round.
 // Split missiles are not counted.
-static const int total_missiles = 30;
+static const int total_missiles = 25;
 
 // The number of missile left in the alien arsenal.
 static int missile_count = total_missiles;
@@ -34,8 +34,7 @@ void init_alien() {
     wattron(ALIEN_CANVAS.window, COLOR_PAIR(2));
 }
 
-void reset_alien() {
-    missile_count = total_missiles;
+void reset_alien() { missile_count = total_missiles;
     hit_count = 0;
 }
 
@@ -46,15 +45,15 @@ void update_alien(int i) {
 
     double difficulty_factor = 1 + log10((double) get_round());
     double rate_limit = 0.5 + 1 / difficulty_factor;
-    double animation_speed = 8 + difficulty_factor;
+    double animation_speed = 8 + 2 * difficulty_factor;
     bool ready = ((get_nanotime() - last_deploy) / SECOND >= rate_limit);
+
 	Sprite* sprite = &ALIEN_CANVAS.sprites[i];
     if (sprite->alive) {
 
         if (check_hitbox(&COLLISION_CANVAS, &sprite->path.current, 1)) {
             sprite->alive = false;
-            clear_sprite(sprite, 160);
-            add_score(100);
+            clear_sprite(&ALIEN_CANVAS, sprite); add_score(100);
             ++hit_count;
 
         } else if (is_animation_done(sprite)) {
@@ -81,7 +80,7 @@ void update_alien(int i) {
 
 static void split_alien(Sprite* sprite) {
     sprite->alive = false;
-    clear_sprite(sprite, 80);
+    clear_sprite(&ALIEN_CANVAS, sprite);
     --hit_count;
 
     int currx = sprite->path.current.x;
