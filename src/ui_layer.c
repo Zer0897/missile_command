@@ -22,6 +22,7 @@ static void update_score() {
     mvwprintw(DISPLAY, 1, COLS / 2, "Score: %d ", score);
 }
 
+
 static void update_base() {
     for (int i = 0; i < 3; i++) {
         struct Base* base = bases[i];
@@ -35,6 +36,7 @@ static void update_base() {
         );
     }
 }
+
 
 static void update_buildings() {
     int xincrement = COLS * .8 / 10;
@@ -95,6 +97,7 @@ void add_score(int val) {
     score += val;
 }
 
+
 void destroy_building() {
     int found = false;
     for (int i = 0; i < 10; i++) {
@@ -116,7 +119,7 @@ void increment_round() {
 
     for (int i = 0; i < 3; i++) {
         while (bases[i]->missile_count) {
-            if (get_time() - timebuff > SECOND / 8) {
+            if (get_time() - timebuff > SECOND / 6) {
                 --bases[i]->missile_count;
                 score += 125;
                 timebuff = get_time();
@@ -144,6 +147,7 @@ void increment_round() {
     reset_defense();
     ++round;
 }
+
 
 int get_round() {
     return round;
