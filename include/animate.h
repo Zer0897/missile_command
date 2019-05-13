@@ -13,7 +13,6 @@ void update_animation(Canvas*, Sprite*);
 double distance(Coord*, Coord*);
 double slope(Coord*, Coord*);
 bool cmp_eq(Coord*, Coord*);
-bool cmp_gt(Coord*, Coord*);
 bool is_animation_done(Sprite*);
 unsigned long get_time();
 

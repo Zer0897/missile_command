@@ -16,40 +16,30 @@ void init_collision() {
 }
 
 
-void collide_input_defense(Coord* point) {
+void  collision_flare(Coord* point) {
     Coord endpoints[8];
     get_box(point, 4, endpoints);
-    for (int endpoint_count = 0; endpoint_count < 8; endpoint_count++) {
-        for (int i = 0; i < 120; i++) {
-            Sprite* flare = &COLLISION_CANVAS.sprites[i];
-            if (!flare->alive) {
-                set_animation(flare, point, &endpoints[endpoint_count], 10);
-                flare->view = '*';
-                flare->keep_alive = SECOND * 1.2;
-                break;
+
+    int count = 0;
+    for (int i = 0; i < 120; i++) {
+        Sprite* flare = &COLLISION_CANVAS.sprites[i];
+        if (!flare->alive) {
+            set_animation(flare, point, &endpoints[count], 10);
+            flare->view = '*';
+            flare->keep_alive = SECOND * 1.2;
+            ++count;
             }
+
+        if (count == 8) {
+            break;
         }
     }
 }
 
 
-bool check_collision_alien(Coord* point) {
-    char c = mvwinch(COLLISION_CANVAS.window, point->y, point->x);
-    return (c == '*');
-}
-
 /*
  * Get the surrounding points in an area `size`, starting from `point`. Place
  * them in the given array `out`.
- *
- * Params:
- *  point : Coord*
- *      The starting center of the box.
- *  size : int
- *      Size of box to get.
- *  Out : Coord*
- *      A pointer to an array with 8 Coord positions. All sides and corners
- *      of the box are places in this array.
 */
 void get_box(Coord* point, int size, Coord out[8]) {
     Coord endpoints[] = {

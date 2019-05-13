@@ -53,7 +53,8 @@ void update_alien(int i) {
 
         if (check_hitbox(&COLLISION_CANVAS, &sprite->path.current, 1)) {
             sprite->alive = false;
-            clear_sprite(&ALIEN_CANVAS, sprite); add_score(100);
+            clear_sprite(&ALIEN_CANVAS, sprite);
+            add_score(100);
             ++hit_count;
 
         } else if (is_animation_done(sprite)) {
@@ -70,7 +71,7 @@ void update_alien(int i) {
         Coord start = { .x = rand() % COLS, .y = 0 };
         Coord target = { .x = rand() % COLS, .y = LINES };
 
-        set_animation(sprite, &start, &target, 8 + 2 * log10(get_round()));
+        set_animation(sprite, &start, &target, animation_speed);
         sprite->view = ACS_DIAMOND;
         last_deploy = get_time();
         --missile_count;

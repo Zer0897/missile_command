@@ -22,9 +22,21 @@ static Canvas* layers[] = {
 
 static void start_round();
 static void reset_round();
+static void init();
 
 
-void init() {
+int main() {
+	init();
+	while (1) {
+		start_round();
+		reset_round();
+	}
+	teardown();
+	return 0;
+}
+
+
+static void init() {
 	srand(time(NULL)); // seed for random events.
 	initscr();
     noecho(); // Don't echo input.
@@ -79,16 +91,6 @@ void panic(char* str) {
 	exit(0);
 }
 
-int main() {
-	init();
-	while (1) {
-		start_round();
-		// getch();
-		reset_round();
-	}
-	teardown();
-	return 0;
-}
 
 
 static void start_round() {

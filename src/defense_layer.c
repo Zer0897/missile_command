@@ -29,7 +29,10 @@ void reset_defense() {
     BASE_RIGHT.missile_count = defense_arsenal;
 }
 
-
+/*
+ * The index of input targets and defense missiles is synchronized.
+ * This way we know exactly which sprite it's targeting.
+*/
 void update_defense(int i) {
     Sprite* target = &INPUT_CANVAS.sprites[i];
     if (!target->alive)
@@ -45,9 +48,9 @@ void update_defense(int i) {
             --base->missile_count;
         }
 
-    } else if (cmp_eq(&missile->path.current, &missile->path.end)) {
-        collide_input_defense(&missile->path.current);
-        target->alive = 0;
+    } else if (is_animation_done(missile)) {
+        collision_flare(&missile->path.current);
+        target->alive = false;
     }
 }
 

@@ -12,6 +12,12 @@
 static void draw(Canvas*, Coord*, chtype);
 
 
+/*
+ * Because animation is time-based, there is no guarentee
+ * the garbage collector sprite will retrace the path exactly.
+ * To compensate, it will also delete all the neighboring locations
+ * as it travels.
+*/
 void clear_sprite(Canvas* canvas, Sprite* sprite) {
     if (sprite->view == ' ')
         return;

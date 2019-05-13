@@ -26,10 +26,6 @@ bool cmp_eq(Coord* c1, Coord* c2) {
     return (c1->y == c2->y && c1->x == c2->x);
 }
 
-bool cmp_gt(Coord* c1, Coord* c2) {
-    static Coord origin = {.x = 0, .y = 0};
-    return distance(&origin, c1) > distance(&origin, c2);
-}
 
 double distance(Coord* c1, Coord* c2) {
     double dy = abs(c2->y - c1->y);
@@ -75,6 +71,7 @@ void update_animation(Canvas* canvas, Sprite* sprite) {
 bool is_animation_done(Sprite* sprite) {
     return (cmp_eq(&sprite->path.current, &sprite->path.end));
 }
+
 
 #if defined(_WIN32) || defined(WIN32) || defined(__CYGWIN32__)
 #include <windows.h>
