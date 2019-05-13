@@ -69,7 +69,7 @@ int main_menu() {
             wclear(mwin);
             const char* msg[] = {
                 "The aliens are attacking!\n",
-                "Use your specialized anti-alien defense missiles to defend Earth.\n",
+                "Use your specialized anti-alien defense missiles to defend Earth (left click).\n",
                 "\n",
                 "Earning points:\n",
                 "    Alien missile destroyed:           100p\n",
