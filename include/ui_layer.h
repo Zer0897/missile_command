@@ -5,12 +5,11 @@
 
 WINDOW *DISPLAY;
 
-
 void init_display();
 void update_display();
 void add_score(int);
 void destroy_building();
-int get_round();
 void increment_round();
+int get_round();
 
 #endif

@@ -3,6 +3,7 @@
 #include <ncurses.h>
 
 #include "main.h"
+#include "main_menu.h"
 #include "canvas.h"
 #include "input_layer.h"
 #include "alien_layer.h"
@@ -12,6 +13,7 @@
 
 
 bool running = true;
+bool lost = false;
 
 static Canvas* layers[] = {
 	&INPUT_CANVAS,
@@ -23,16 +25,27 @@ static Canvas* layers[] = {
 static void start_round();
 static void reset_round();
 static void init();
-
+static void start_game();
 
 int main() {
 	init();
-	while (1) {
-		start_round();
-		reset_round();
+	while (main_menu()) {
+		start_game();
 	}
 	teardown();
 	return 0;
+}
+
+static void start_game() {
+	lost = false;
+	clear_game();
+	while (true) {
+		start_round();
+		if (!lost)
+			reset_round();
+		else
+			break;
+	}
 }
 
 
@@ -94,6 +107,7 @@ void panic(char* str) {
 
 
 static void start_round() {
+	running = true;
 	while (running) {
 		update();
 	}
@@ -101,6 +115,10 @@ static void start_round() {
 
 static void reset_round() {
 	increment_round();
+	clear_game();
+}
+
+void clear_game() {
 	wclear(DISPLAY);
 	for (int l = 0; l < 4; l++) {
 		Canvas* layer = layers[l];
@@ -111,5 +129,11 @@ static void reset_round() {
 	}
 	reset_alien();
 	clear();
-	running = true;
+	refresh();
+}
+
+void lose_game() {
+	lost = true;
+	running = false;
+	clear_game();
 }

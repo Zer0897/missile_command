@@ -36,6 +36,7 @@ void init_alien() {
 
 void reset_alien() { missile_count = total_missiles;
     hit_count = 0;
+    missile_count = total_missiles;
 }
 
 

@@ -7,7 +7,7 @@ SDIR=src
 ODIR=obj
 TARGET=target
 
-LIBS=-lncurses -lm
+LIBS=-lmenu -lncurses -lm
 
 _DEPS = \
     main.h \
@@ -17,7 +17,8 @@ _DEPS = \
     alien_layer.h \
     defense_layer.h \
     collision_layer.h \
-    ui_layer.h
+    ui_layer.h \
+    main_menu.h
 
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
@@ -29,7 +30,8 @@ _OBJ = \
     alien_layer.o \
     defense_layer.o \
     collision_layer.o \
-    ui_layer.o
+    ui_layer.o \
+    main_menu.o
 
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 

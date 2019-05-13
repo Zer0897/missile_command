@@ -16,6 +16,25 @@ static struct Base* bases[] = {&BASE_LEFT, &BASE_MID, &BASE_RIGHT};
 
 static void draw_building(Coord*, int);
 static void clear_building(Coord*, int);
+static void update_score();
+static void update_buildings();
+static void update_base();
+static void reset_buildings();
+
+
+void init_display() {
+    DISPLAY = newwin(0, 0, 0, 0);
+    init_pair(5, COLOR_CYAN, COLOR_BLACK);
+    wattron(DISPLAY, COLOR_PAIR(5));
+}
+
+
+void update_display() {
+    update_buildings();
+    update_score();
+    update_base();
+    mvwprintw(DISPLAY, 1, COLS - 10, "Round %d ", round);
+}
 
 
 static void update_score() {
@@ -78,21 +97,6 @@ static void clear_building(Coord* position, int size) {
 }
 
 
-void init_display() {
-    DISPLAY = newwin(0, 0, 0, 0);
-    init_pair(5, COLOR_CYAN, COLOR_BLACK);
-    wattron(DISPLAY, COLOR_PAIR(5));
-}
-
-
-void update_display() {
-    update_buildings();
-    update_score();
-    update_base();
-    mvwprintw(DISPLAY, 1, COLS - 10, "Round %d ", round);
-}
-
-
 void add_score(int val) {
     score += val;
 }
@@ -108,8 +112,12 @@ void destroy_building() {
         }
     }
     if (!found) {
-        teardown();
-        exit(0);
+        mvprintw(LINES / 2, COLS / 2, "You lose.");
+        round = 1;
+        score = 0;
+        getch();
+        lose_game();
+        reset_buildings();
     }
 }
 
@@ -140,12 +148,15 @@ void increment_round() {
         }
         timebuff = get_time();
     }
+    reset_buildings();
+    ++round;
+}
+
+static void reset_buildings() {
     for (int i = 0; i < 10; i++) {
         buildings[i] = 1;
     }
-
     reset_defense();
-    ++round;
 }
 
 
