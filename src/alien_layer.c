@@ -19,8 +19,8 @@ static int missile_count = total_missiles;
 // destroyed or hit the ground.
 static int hit_count = 0;
 
-
 static void split_alien(Sprite*);
+
 
 // Arsenal is depleted and there are no more active missiles.
 bool is_alien_done() {
@@ -34,12 +34,17 @@ void init_alien() {
     wattron(ALIEN_CANVAS.window, COLOR_PAIR(2));
 }
 
-void reset_alien() { missile_count = total_missiles;
-    hit_count = 0;
+
+void reset_alien() {
     missile_count = total_missiles;
+    hit_count = 0;
 }
 
 
+/*
+ * Create alien missile sprites with random start and end points.
+ * Rate limit of missile spawn decreases each round, animation speed increases.
+*/
 void update_alien(int i) {
     static long last_deploy;
     static long last_split;
@@ -51,17 +56,17 @@ void update_alien(int i) {
 
 	Sprite* sprite = &ALIEN_CANVAS.sprites[i];
     if (sprite->alive) {
-
+        // Hit a defense flare, alien missile destroyed.
         if (check_hitbox(&COLLISION_CANVAS, &sprite->path.current, 1)) {
             sprite->alive = false;
             clear_sprite(&ALIEN_CANVAS, sprite);
             add_score(100);
             ++hit_count;
-
+        // Reached the ground unscathed.
         } else if (is_animation_done(sprite)) {
             destroy_building();
             ++hit_count;
-
+        // Split every 20 seconds.
         } else if (get_time() - last_split > SECOND * 20) {
             if (get_round() > 1) {
                 split_alien(sprite);
@@ -72,25 +77,27 @@ void update_alien(int i) {
         Coord start = { .x = rand() % COLS, .y = 0 };
         Coord target = { .x = rand() % COLS, .y = LINES };
 
-        set_animation(sprite, &start, &target, animation_speed);
-        sprite->view = ACS_DIAMOND;
-        last_deploy = get_time();
         --missile_count;
+        last_deploy = get_time();
+        sprite->view = ACS_DIAMOND;
+        set_animation(sprite, &start, &target, animation_speed);
     }
 }
 
 
 static void split_alien(Sprite* sprite) {
+    --hit_count; // Keeps the hit count at the expected value.
     sprite->alive = false;
     clear_sprite(&ALIEN_CANVAS, sprite);
-    --hit_count;
 
+    // Random coordinates to the left and right of current.
     int currx = sprite->path.current.x;
     Coord targets[] = {
         { .x = rand() % currx, .y = LINES },
         { .x = currx + rand() % (COLS - currx), .y = LINES }
     };
 
+    // Find two open locations in memory to store the new sprites.
     int count = 0;
     for (int i = 0; i < 120; i++) {
         Sprite* next = &ALIEN_CANVAS.sprites[i];
