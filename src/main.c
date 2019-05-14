@@ -120,12 +120,12 @@ static void reset_round() {
 
 void clear_game() {
 	wclear(DISPLAY);
-	for (int l = 0; l < 4; l++) {
-		Canvas* layer = layers[l];
-		for (int i = 0; i < 120; i++) {
+	for (int i = 0; i < 120; i++) {
+		for (int l = 0; l < 4; l++) {
+			Canvas* layer = layers[l];
 			layer->sprites[i].alive = false;
+			wclear(layer->window);
 		}
-		wclear(layer->window);
 	}
 	reset_alien();
 	clear();
