@@ -14,7 +14,7 @@
 
 // Animation loop is running
 bool running = true;
-// Game end
+// Game is lost.
 bool lost = false;
 
 /*
@@ -43,19 +43,6 @@ int main() {
 	return 0;
 }
 
-// Reset any previous game data, start the game animation loop.
-static void start_game() {
-	clear_game();
-
-	lost = false;
-	while (true) {
-		start_round();
-		if (lost) break;
-
-		reset_round();
-	}
-}
-
 
 static void init() {
 	srand(time(NULL)); // seed for random events.
@@ -70,6 +57,20 @@ static void init() {
 	init_defense();
 	init_collision();
 	init_display();
+}
+
+
+// Reset any previous game data, start the game animation loop.
+static void start_game() {
+	clear_game();
+
+	lost = false;
+	while (true) {
+		start_round();
+		if (lost) break;
+
+		reset_round();
+	}
 }
 
 
