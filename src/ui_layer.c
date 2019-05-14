@@ -10,7 +10,7 @@
 
 static long int score = 0;
 static int round = 1;
-static int buildings[10] = { [0 ... 9] = 1 };
+static int building_count = 10;
 static struct Base* bases[] = {&BASE_LEFT, &BASE_MID, &BASE_RIGHT};
 
 
@@ -56,12 +56,14 @@ static void update_base() {
     }
 }
 
-
+/*
+ * Only draw
+*/
 static void update_buildings() {
     int xincrement = COLS * .8 / 10;
     Coord pos = { .x = xincrement * 2, .y = LINES };
     for (int i = 0; i < 10; i++) {
-        if (buildings[i]) {
+        if (i < building_count) {
             draw_building(&pos, 1);
         } else {
             clear_building(&pos, 1);
@@ -103,20 +105,15 @@ void add_score(int val) {
 
 
 void destroy_building() {
-    int found = false;
-    for (int i = 0; i < 10; i++) {
-        if (buildings[i]) {
-            buildings[i] = 0;
-            found = true;
-            break;
-        }
-    }
+    --building_count;
     // No more buildings to destory.
-    if (!found) {
-        lose_game();
+    if (!building_count) {
         round = 1;
         score = 0;
-        mvprintw(LINES / 2, COLS / 2, "You lose.");
+
+        mvprintw(LINES / 2, COLS / 2, "You lose. <press any key>");
+        lose_game();
+        // Pause for the user.
         getch();
     }
 }
@@ -127,12 +124,15 @@ void reset_ui() {
 }
 
 
+/*
+ * Play a short incrementing animation for the user.
+*/
 void increment_round() {
     long timebuff = get_time();
 
     for (int i = 0; i < 3; i++) {
         while (bases[i]->missile_count) {
-            if (get_time() - timebuff > SECOND / 6) {
+            if (get_time() - timebuff > SECOND / 4) {
                 --bases[i]->missile_count;
                 score += 125;
                 timebuff = get_time();
@@ -143,11 +143,9 @@ void increment_round() {
     }
 
     timebuff = get_time();
-    for (int i = 0; i < 10; i++) {
-        if (buildings[i]) {
-            score += 300;
-            buildings[i] = 0;
-        }
+    for (int i = 0; i < building_count; i++) {
+        score += 300;
+        --building_count;
         while (get_time() - timebuff < SECOND / 3) {
             update();
         }
@@ -158,9 +156,7 @@ void increment_round() {
 }
 
 static void reset_buildings() {
-    for (int i = 0; i < 10; i++) {
-        buildings[i] = 1;
-    }
+    building_count = 10;
 }
 
 
