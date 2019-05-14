@@ -10,6 +10,7 @@ void update_display();
 void add_score(int);
 void destroy_building();
 void increment_round();
+void reset_ui();
 int get_round();
 
 #endif

@@ -12,9 +12,14 @@
 #include "ui_layer.h"
 
 
+// Animation loop is running
 bool running = true;
+// Game end
 bool lost = false;
 
+/*
+ * Canvases that have animations to update.
+*/
 static Canvas* layers[] = {
 	&INPUT_CANVAS,
 	&ALIEN_CANVAS,
@@ -22,29 +27,32 @@ static Canvas* layers[] = {
 	&COLLISION_CANVAS,
 };
 
+static void init();
 static void start_round();
 static void reset_round();
-static void init();
 static void start_game();
+
 
 int main() {
 	init();
+	// main_menu returns false if `Exit` is selected.
 	while (main_menu()) {
 		start_game();
 	}
-	teardown();
+	endwin();
 	return 0;
 }
 
+// Reset any previous game data, start the game animation loop.
 static void start_game() {
-	lost = false;
 	clear_game();
+
+	lost = false;
 	while (true) {
 		start_round();
-		if (!lost)
-			reset_round();
-		else
-			break;
+		if (lost) break;
+
+		reset_round();
 	}
 }
 
@@ -56,6 +64,7 @@ static void init() {
     start_color(); // Enable colored formatting.
 	curs_set(0); // Invisible cursor
 
+	// Run the setup required for all other layers.
 	init_input();
 	init_alien();
 	init_defense();
@@ -63,12 +72,22 @@ static void init() {
 	init_display();
 }
 
+
+/*
+ * The primary animation loop.
+ *
+ * Loops over each layer, passing the index `i` for
+ * context. Each layer will update its sprite at location `i`,
+ * then any animations that need to be updated are drawn.
+ * Finally all the windows are refreshed, displaying the new
+ * frame.
+*/
 void update() {
 	for (int i = 0; i < 120; i++) {
+		update_display();
 		update_input(i);
 		update_alien(i);
 		update_defense(i);
-		update_display();
 
 		for (int l = 0; l < 4; l++) {
 			Canvas* layer = layers[l];
@@ -80,30 +99,18 @@ void update() {
 		}
 	}
 
+	wrefresh(DISPLAY);
 	wrefresh(COLLISION_CANVAS.window);
 	wrefresh(INPUT_CANVAS.window);
 	wrefresh(ALIEN_CANVAS.window);
 	wrefresh(DEFENSE_CANVAS.window);
-	wrefresh(DISPLAY);
 	refresh();
 
-
+	// No more missiles to send.
 	if (is_alien_done()) {
 		running = false;
 	}
 }
-
-
-void teardown() {
-	endwin();
-}
-
-void panic(char* str) {
-	teardown();
-	printf("Error: %s\n", str);
-	exit(0);
-}
-
 
 
 static void start_round() {
@@ -113,11 +120,16 @@ static void start_round() {
 	}
 }
 
+
 static void reset_round() {
 	increment_round();
 	clear_game();
 }
 
+/*
+ * Make sure all the sprites are disabled,
+ * and clear all of the windows.
+*/
 void clear_game() {
 	wclear(DISPLAY);
 	for (int i = 0; i < 120; i++) {
@@ -127,13 +139,15 @@ void clear_game() {
 			wclear(layer->window);
 		}
 	}
-	reset_alien();
 	clear();
 	refresh();
+
+	reset_alien();
+    reset_defense();
+	reset_ui();
 }
 
 void lose_game() {
 	lost = true;
 	running = false;
-	clear_game();
 }

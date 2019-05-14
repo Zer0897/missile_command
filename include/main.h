@@ -2,8 +2,6 @@
 #define MAIN_H
 
 void setup();
-void panic();
-void teardown();
 int main();
 void update();
 void lose_game();

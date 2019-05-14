@@ -111,14 +111,19 @@ void destroy_building() {
             break;
         }
     }
+    // No more buildings to destory.
     if (!found) {
-        mvprintw(LINES / 2, COLS / 2, "You lose.");
+        lose_game();
         round = 1;
         score = 0;
+        mvprintw(LINES / 2, COLS / 2, "You lose.");
         getch();
-        lose_game();
-        reset_buildings();
     }
+}
+
+
+void reset_ui() {
+    reset_buildings();
 }
 
 
@@ -156,7 +161,6 @@ static void reset_buildings() {
     for (int i = 0; i < 10; i++) {
         buildings[i] = 1;
     }
-    reset_defense();
 }
 
 
