@@ -16,10 +16,15 @@ void init_collision() {
 }
 
 
-void  collision_flare(Coord* point) {
+/*
+ * Spawns 8 sprites in opposite directions. These are what
+ * the alien sprites look for to detect collision.
+*/
+void collision_flare(Coord* point) {
     Coord endpoints[8];
     get_box(point, 4, endpoints);
 
+    // Find a location in memory for the each sprite
     int count = 0;
     for (int i = 0; i < 120; i++) {
         Sprite* flare = &COLLISION_CANVAS.sprites[i];
@@ -28,7 +33,7 @@ void  collision_flare(Coord* point) {
             flare->view = '*';
             flare->keep_alive = SECOND * 1.2;
             ++count;
-            }
+        }
 
         if (count == 8) {
             break;
@@ -38,7 +43,7 @@ void  collision_flare(Coord* point) {
 
 
 /*
- * Get the surrounding points in an area `size`, starting from `point`. Place
+ * Get the perimeter points in an area `size`, starting from `point`. Place
  * them in the given array `out`.
 */
 void get_box(Coord* point, int size, Coord out[8]) {
@@ -58,11 +63,15 @@ void get_box(Coord* point, int size, Coord out[8]) {
 }
 
 
+/*
+ * Recursively check the 8 perimeter coordinates until a character
+ * is found, or there is no more coords to check. Note that this does not
+ * include the entire area, some coords may be missed.
+*/
 bool check_hitbox(Canvas* canvas, Coord* point, int size) {
     if (size == 0) {
         return false;
     }
-
     Coord box[8];
     get_box(point, size, box);
     for (int i = 0; i < 8; i++) {
