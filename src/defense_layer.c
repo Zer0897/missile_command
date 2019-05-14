@@ -3,8 +3,10 @@
 #include "animate.h"
 #include "collision_layer.h"
 
+
 static const int defense_arsenal = 10;
 static struct Base* get_launchpoint(Coord*);
+
 
 void init_defense() {
     DEFENSE_CANVAS.window = newwin(0, 0, 0, 0);
@@ -31,9 +33,10 @@ void reset_defense() {
 
 /*
  * The index of input targets and defense missiles is synchronized.
- * This way we know exactly which sprite it's targeting.
+ * This way we know exactly which sprite the missile is targeting at all times
 */
 void update_defense(int i) {
+    // check for a live target.
     Sprite* target = &INPUT_CANVAS.sprites[i];
     if (!target->alive)
         return;
@@ -55,9 +58,13 @@ void update_defense(int i) {
 }
 
 
+/*
+ * Get the closest base to `target` that has availible ammo.
+ * Returns NULL if no bases have ammo.
+*/
 static struct Base* get_launchpoint(Coord* target) {
-    struct Base* bases[] = {&BASE_LEFT, &BASE_MID, &BASE_RIGHT};
     struct Base* base = NULL;
+    struct Base* bases[] = {&BASE_LEFT, &BASE_MID, &BASE_RIGHT};
     for (int i = 0; i < 3; i++) {
         if (!bases[i]->missile_count)
             continue;
