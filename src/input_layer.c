@@ -7,6 +7,13 @@ static int get_event(MEVENT*, int);
 static int get_clickpos(Coord*);
 
 
+/*
+ * Check for any click events, add a target to its location.
+ *
+ * Note the defense layer will detect these targets implicitly,
+ * and launch flares at their location. Cleanup of the targets
+ * is handled by defense as well.
+*/
 void update_input(int i) {
 	Sprite* sprite = &INPUT_CANVAS.sprites[i];
 	if (sprite->alive) return;
@@ -15,7 +22,7 @@ void update_input(int i) {
     if (get_clickpos(&click_pos) == OK) {
         sprite->path.current = click_pos;
 		sprite->view = 'X';
-		sprite->alive = SECOND * 100;
+		sprite->alive = SECOND * 5;
 	}
 }
 
