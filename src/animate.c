@@ -4,25 +4,31 @@
 #include "animate.h"
 
 
+/*
+ * Find the coordinate location of where the sprite should be
+ * at the current point in time.
+*/
 void lerp(Vector* vec) {
     double dist = distance(&vec->beg, &vec->end);
-    double total_time = dist / vec->speed;
+    double total_time = dist / vec->speed; // How long the journey is going to take.
     double elapsed = (double) (get_time() - vec->start_time) / SECOND;
     double mult = elapsed / total_time;
 
-    if (mult > 1) {
-        vec->current = vec->end;
-    } else {
+    if (mult < 1) {
         Coord next = {
             .y = vec->beg.y + (vec->end.y - vec->beg.y) * mult,
             .x = vec->beg.x + (vec->end.x - vec->beg.x) * mult
         };
         vec->current = next;
-    }
+    } else
+        vec->current = vec->end;
 }
 
 
-bool cmp_eq(Coord* c1, Coord* c2) {
+/*
+ * Return true if coordinates are equal, otherwise false.
+*/
+bool cmpcoord(Coord* c1, Coord* c2) {
     return (c1->y == c2->y && c1->x == c2->x);
 }
 
@@ -42,6 +48,12 @@ double slope(Coord* c1, Coord* c2) {
 }
 
 
+/*
+ * Convenience method.
+ *
+ * Set all the necessary fields for the sprite to be updated
+ * by the primary animation loop.
+*/
 void set_animation(Sprite* sprite, Coord* start, Coord* end, int speed) {
     sprite->path.current = *start;
     sprite->path.beg = *start;
@@ -51,6 +63,12 @@ void set_animation(Sprite* sprite, Coord* start, Coord* end, int speed) {
     sprite->path.start_time = get_time();
 }
 
+
+/*
+ * Draw the character to the buffer, update position.
+ * Delete sprites that are done with their animation, and have expired
+ * past their `.keep_alive` time.
+*/
 void update_animation(Canvas* canvas, Sprite* sprite) {
     draw_sprite(canvas, sprite);
 
@@ -67,12 +85,19 @@ void update_animation(Canvas* canvas, Sprite* sprite) {
     }
 }
 
-
+/*
+ * Convenience method.
+ * Check if the sprite is at its destination.
+*/
 bool is_animation_done(Sprite* sprite) {
-    return (cmp_eq(&sprite->path.current, &sprite->path.end));
+    return (cmpcoord(&sprite->path.current, &sprite->path.end));
 }
 
-
+/*
+ * Cross-platform solution for tracking time in milliseconds.
+ *
+ * Windows is more coarse than *nix, about 50ms.
+*/
 #if defined(_WIN32) || defined(WIN32) || defined(__CYGWIN32__)
 #include <windows.h>
 unsigned long get_time() {
