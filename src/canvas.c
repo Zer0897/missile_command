@@ -23,10 +23,13 @@ void clear_sprite(Canvas* canvas, Sprite* sprite) {
         return;
 
     Coord box[8];
+    // Deleting a sprite causes all sorts of positioning issues
+    // with active animations. Instead we replace them with an
+    // invisible character.
     Sprite gc = { .view = ' ' };
     set_animation(&gc, &sprite->path.beg, &sprite->path.current, 1000);
 
-    // Increment the end one further.
+    // Increment the endpoint one further.
     int dx = gc.path.end.x - gc.path.beg.x;
     int dy = gc.path.end.y - gc.path.beg.y;
     gc.path.end.x += (dx) ? dx / abs(dx) : 0;
@@ -48,7 +51,9 @@ void draw_sprite(Canvas* canvas, Sprite* sprite) {
     draw(canvas, &sprite->path.current, sprite->view);
 }
 
-
+/*
+ * Check if a canvas has a character at `coord`
+*/
 bool has_object(Canvas* canvas, Coord* coord) {
     char c = mvwinch(canvas->window, coord->y, coord->x);
     return (c != ERR && c != ' ');
