@@ -10,7 +10,7 @@
 
 // The total missile for a round.
 // Split missiles are not counted.
-static const int total_missiles = 25;
+static const int total_missiles = 30;
 
 // The number of missile left in the alien arsenal.
 static int missile_count = total_missiles;
@@ -46,7 +46,7 @@ void update_alien(int i) {
 
     double difficulty_factor = 1 + log10((double) get_round());
     double rate_limit = 0.5 + 1 / difficulty_factor;
-    double animation_speed = 8 + 2 * difficulty_factor;
+    double animation_speed = 7 + 2 * difficulty_factor;
     bool ready = ((get_time() - last_deploy) / SECOND >= rate_limit);
 
 	Sprite* sprite = &ALIEN_CANVAS.sprites[i];
