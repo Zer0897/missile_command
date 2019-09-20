@@ -54,7 +54,7 @@ void update_alien(int i) {
     double animation_speed = 7 + 2 * difficulty_factor;
     bool ready = ((get_time() - last_deploy) / SECOND >= rate_limit);
 
-	Sprite* sprite = &ALIEN_CANVAS.sprites[i];
+    Sprite* sprite = &ALIEN_CANVAS.sprites[i];
     if (sprite->alive) {
         // Hit a defense flare, alien missile destroyed.
         if (check_hitbox(&COLLISION_CANVAS, &sprite->path.current, 1)) {

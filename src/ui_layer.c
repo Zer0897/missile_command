@@ -143,7 +143,7 @@ void increment_round() {
     }
 
     timebuff = get_time();
-    for (int i = 0; i < building_count; i++) {
+    while (building_count) {
         score += 300;
         --building_count;
         while (get_time() - timebuff < SECOND / 3) {

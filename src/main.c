@@ -14,7 +14,7 @@
 
 // Animation loop is running
 bool running = true;
-// Game is lost.
+// Game end
 bool lost = false;
 
 /*
@@ -43,23 +43,6 @@ int main() {
 	return 0;
 }
 
-
-static void init() {
-	srand(time(NULL)); // seed for random events.
-	initscr();
-    noecho(); // Don't echo input.
-    start_color(); // Enable colored formatting.
-	curs_set(0); // Invisible cursor
-
-	// Run the setup required for all other layers.
-	init_input();
-	init_alien();
-	init_defense();
-	init_collision();
-	init_display();
-}
-
-
 // Reset any previous game data, start the game animation loop.
 static void start_game() {
 	clear_game();
@@ -71,6 +54,22 @@ static void start_game() {
 
 		reset_round();
 	}
+}
+
+
+static void init() {
+	srand(time(NULL)); // seed for random events.
+	initscr();
+  noecho(); // Don't echo input.
+  start_color(); // Enable colored formatting.
+	curs_set(0); // Invisible cursor
+
+	// Run the setup required for all other layers.
+	init_input();
+	init_alien();
+	init_defense();
+	init_collision();
+	init_display();
 }
 
 
